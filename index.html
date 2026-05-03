@@ -1,0 +1,277 @@
+import React, { useState, useEffect } from 'react';
+import { Calendar, Clock, BookOpen, CheckCircle2, AlertCircle, User, ChevronDown } from 'lucide-react';
+
+const toBnNum = (num) => {
+  return num.toString().replace(/\d/g, d => "০১২৩৪৫৬৭৮৯"[d]);
+};
+
+const App = () => {
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [group, setGroup] = useState('Science');
+  const [artsOptional, setArtsOptional] = useState('Civics');
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const scienceRoutine = [
+    { id: 's1', subject: "কুরআন মাজিদ", date: "2026-07-02T10:00:00" },
+    { id: 's2', subject: "আরবি সাহিত্য (বিজ্ঞান)", date: "2026-07-04T10:00:00" },
+    { id: 's3', subject: "বাংলা ১ম পত্র", date: "2026-07-06T10:00:00" },
+    { id: 's4', subject: "বাংলা ২য় পত্র", date: "2026-07-08T10:00:00" },
+    { id: 's5', subject: "ইংরেজি ১ম পত্র", date: "2026-07-11T10:00:00" },
+    { id: 's6', subject: "ইংরেজি ২য় পত্র", date: "2026-07-13T10:00:00" },
+    { id: 's7', subject: "হাদিস ও উসুলুল হাদিস", date: "2026-07-16T10:00:00" },
+    { id: 's8', subject: "ফিকহ", date: "2026-07-18T10:00:00" },
+    { id: 's9', subject: "তথ্য ও যোগাযোগ প্রযুক্তি", date: "2026-07-22T10:00:00" },
+    { id: 's10', subject: "পদার্থবিজ্ঞান ১ম পত্র", date: "2026-07-25T10:00:00" },
+    { id: 's11', subject: "পদার্থবিজ্ঞান ২য় পত্র", date: "2026-07-27T10:00:00" },
+    { id: 's12', subject: "রসায়ন ১ম পত্র", date: "2026-07-29T10:00:00" },
+    { id: 's13', subject: "রসায়ন ২য় পত্র", date: "2026-08-01T10:00:00" },
+    { id: 's14', subject: "জীববিজ্ঞান ১ম পত্র", date: "2026-08-02T10:00:00" },
+    { id: 's15', subject: "জীববিজ্ঞান ২য় পত্র", date: "2026-08-04T10:00:00" },
+    { id: 's16', subject: "উচ্চতর গণিত ১ম পত্র", date: "2026-08-06T10:00:00" },
+    { id: 's17', subject: "উচ্চতর গণিত ২য় পত্র", date: "2026-08-08T10:00:00" }
+  ].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  const buildArtsRoutine = () => {
+    let artsBase = [
+      { id: 'a1', subject: "কুরআন মাজিদ", date: "2026-07-02T10:00:00" },
+      { id: 'a2', subject: "আরবি ১ম পত্র (সাধারণ)", date: "2026-07-04T10:00:00" },
+      { id: 'a3', subject: "বাংলা ১ম পত্র", date: "2026-07-06T10:00:00" },
+      { id: 'a4', subject: "বাংলা ২য় পত্র", date: "2026-07-08T10:00:00" },
+      { id: 'a5', subject: "ইংরেজি ১ম পত্র", date: "2026-07-11T10:00:00" },
+      { id: 'a6', subject: "ইংরেজি ২য় পত্র", date: "2026-07-13T10:00:00" },
+      { id: 'a7', subject: "আরবি ২য় পত্র", date: "2026-07-15T10:00:00" },
+      { id: 'a8', subject: "হাদিস ও উসুলুল হাদিস", date: "2026-07-16T10:00:00" },
+      { id: 'a9', subject: "আল ফিকহ ১ম পত্র", date: "2026-07-18T10:00:00" },
+      { id: 'a10', subject: "আল ফিকহ ২য় পত্র", date: "2026-07-19T10:00:00" },
+      { id: 'a11', subject: "তথ্য ও যোগাযোগ প্রযুক্তি", date: "2026-07-22T10:00:00" },
+      { id: 'a12', subject: "বালাগাত ও মানতিক", date: "2026-07-25T10:00:00" },
+      { id: 'a13', subject: "ইসলামের ইতিহাস", date: "2026-07-27T10:00:00" }
+    ];
+
+    if (artsOptional === 'Civics') {
+      artsBase.push(
+        { id: 'a14c', subject: "পৌরনীতি ও সুশাসন ১ম", date: "2026-07-29T10:00:00" },
+        { id: 'a15c', subject: "পৌরনীতি ও সুশাসন ২য়", date: "2026-08-01T10:00:00" }
+      );
+    } else {
+      artsBase.push(
+        { id: 'a14e', subject: "অর্থনীতি ১ম পত্র", date: "2026-07-29T10:00:00" },
+        { id: 'a15e', subject: "অর্থনীতি ২য় পত্র", date: "2026-08-01T10:00:00" }
+      );
+    }
+    
+    return artsBase.sort((a, b) => new Date(a.date) - new Date(b.date));
+  };
+
+  const currentRoutine = group === 'Science' ? scienceRoutine : buildArtsRoutine();
+
+  const getStatus = (examDateStr) => {
+    const examDate = new Date(examDateStr);
+    const diffMs = examDate - currentTime;
+    
+    if (diffMs < 0) {
+      const examEnd = new Date(examDate.getTime() + 3 * 60 * 60 * 1000);
+      if (currentTime > examEnd) return { status: 'completed', diffMs: 0 };
+      return { status: 'ongoing', diffMs: 0 };
+    }
+
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+
+    return { status: 'upcoming', days, hours, minutes, seconds, diffMs };
+  };
+
+  const calculateGap = (currentDate, prevDate) => {
+    const d1 = new Date(prevDate);
+    const d2 = new Date(currentDate);
+    d1.setHours(0, 0, 0, 0);
+    d2.setHours(0, 0, 0, 0);
+    const diffTime = d2 - d1;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) - 1;
+    return diffDays > 0 ? diffDays : 0;
+  };
+
+  const upcomingExams = currentRoutine.filter(exam => getStatus(exam.date).status === 'upcoming');
+  const nextExam = upcomingExams.length > 0 ? upcomingExams[0] : null;
+
+  const formatDate = (dateStr) => {
+    const options = { day: 'numeric', month: 'short' };
+    return new Date(dateStr).toLocaleDateString('bn-BD', options);
+  };
+
+  const formatDay = (dateStr) => {
+    const options = { weekday: 'long' };
+    return new Date(dateStr).toLocaleDateString('bn-BD', options);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4 font-sans text-white">
+      <div className="w-full max-w-md bg-gray-800 rounded-3xl shadow-2xl overflow-hidden border border-gray-700 relative">
+        
+        <div className="absolute top-4 right-4 z-20">
+          <a 
+            href="https://linkdin.com/in/RahatAhmedX" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 bg-black/30 hover:bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full text-xs text-blue-200 transition-all border border-blue-500/30"
+          >
+            <User size={12} className="text-blue-400" />
+            Developed by <span className="font-bold text-blue-300">Rahat</span>
+          </a>
+        </div>
+
+        <div className="bg-gradient-to-br from-blue-700 to-slate-900 p-6 rounded-b-3xl shadow-lg relative z-10 pt-14">
+          <div className="flex justify-between items-center mb-5">
+            <h2 className="text-sm font-semibold tracking-wider text-blue-200 uppercase flex items-center gap-2">
+              <Clock size={16} className="text-blue-300 animate-pulse" />
+              পরবর্তী পরীক্ষা
+            </h2>
+          </div>
+          
+          {nextExam ? (
+            <div>
+              <h1 className="text-2xl font-bold mb-1 leading-tight text-white">{nextExam.subject}</h1>
+              <p className="text-blue-200 text-sm mb-6 flex items-center gap-2 font-medium">
+                <Calendar size={14} />
+                {formatDate(nextExam.date)} • {formatDay(nextExam.date)} (সকাল ১০:০০)
+              </p>
+              
+              <div className="grid grid-cols-4 gap-2 text-center">
+                {['days', 'hours', 'minutes', 'seconds'].map((unit, idx) => {
+                  const status = getStatus(nextExam.date);
+                  const values = [status.days, status.hours, status.minutes, status.seconds];
+                  const labels = ['দিন', 'ঘণ্টা', 'মিনিট', 'সেকেন্ড'];
+                  return (
+                    <div key={unit} className="bg-white/10 backdrop-blur-md rounded-xl p-2 flex flex-col justify-center border border-white/10 shadow-inner">
+                      <span className="text-2xl font-bold font-mono text-white">
+                        {toBnNum(String(values[idx]).padStart(2, '0'))}
+                      </span>
+                      <span className="text-[10px] uppercase tracking-wide mt-1 text-blue-200">{labels[idx]}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <div className="text-center py-6">
+              <CheckCircle2 size={48} className="mx-auto text-green-400 mb-3" />
+              <h1 className="text-xl font-bold text-white">সব পরীক্ষা শেষ!</h1>
+              <p className="text-sm text-gray-400 mt-2">আলহামদুলিল্লাহ, আপনার পরীক্ষা সম্পন্ন হয়েছে।</p>
+            </div>
+          )}
+        </div>
+
+        <div className="px-5 pt-5 pb-2">
+          <div className="flex gap-2 p-1 bg-gray-900 rounded-xl mb-3">
+            <button 
+              onClick={() => setGroup('Science')}
+              className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${group === 'Science' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-400 hover:text-gray-200'}`}
+            >
+              Science
+            </button>
+            <button 
+              onClick={() => setGroup('Arts')}
+              className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${group === 'Arts' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-400 hover:text-gray-200'}`}
+            >
+              Arts
+            </button>
+          </div>
+
+          {group === 'Arts' && (
+            <div className="relative">
+              <select 
+                value={artsOptional}
+                onChange={(e) => setArtsOptional(e.target.value)}
+                className="w-full appearance-none bg-gray-700/50 border border-gray-600 text-gray-200 text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-blue-500 font-medium"
+              >
+                <option value="Civics">ঐচ্ছিক: পৌরনীতি ও সুশাসন</option>
+                <option value="Economics">ঐচ্ছিক: অর্থনীতি</option>
+              </select>
+              <ChevronDown size={16} className="absolute right-4 top-3 text-gray-400 pointer-events-none" />
+            </div>
+          )}
+        </div>
+
+        <div className="px-4 pb-4 h-[350px] overflow-y-auto custom-scrollbar">
+          <h3 className="text-xs font-semibold text-gray-400 mb-3 pl-1 flex items-center gap-2 mt-2">
+            <BookOpen size={14} /> সম্পূর্ণ রুটিন ({toBnNum(currentRoutine.length)} বিষয়)
+          </h3>
+          
+          <div className="space-y-2.5">
+            {currentRoutine.map((exam, index) => {
+              const statusData = getStatus(exam.date);
+              const isNext = nextExam && nextExam.id === exam.id;
+              
+              let gapDays = 0;
+              if (index > 0) {
+                gapDays = calculateGap(exam.date, currentRoutine[index - 1].date);
+              }
+
+              let cardStyle = "bg-gray-800/80 border-gray-700";
+              let textStyle = "text-gray-200";
+              let badge = null;
+
+              if (statusData.status === 'completed') {
+                cardStyle = "opacity-60 bg-gray-800/50 border-gray-800";
+                textStyle = "text-gray-500 line-through";
+                badge = <span className="text-[10px] text-green-500 bg-green-500/10 px-2 py-0.5 rounded-full border border-green-500/20">সম্পন্ন</span>;
+              } else if (statusData.status === 'ongoing') {
+                cardStyle = "bg-green-900/20 border-green-500/40";
+                textStyle = "text-green-400 font-bold";
+                badge = <span className="text-[10px] text-green-400 animate-pulse flex items-center gap-1"><AlertCircle size={10}/> চলছে</span>;
+              } else if (isNext) {
+                cardStyle = "bg-blue-900/30 border-blue-500/60 shadow-lg shadow-blue-900/20";
+                textStyle = "text-blue-300 font-bold";
+                badge = <span className="text-[10px] text-blue-200 bg-blue-600 px-2 py-0.5 rounded-full shadow-sm">পরবর্তী</span>;
+              } else {
+                badge = <span className="text-[10px] font-mono text-gray-400 bg-gray-700/50 px-2 py-0.5 rounded-full">{toBnNum(statusData.days)} দিন বাকি</span>;
+              }
+
+              return (
+                <div key={exam.id} className={`p-3 rounded-2xl border transition-all ${cardStyle}`}>
+                  <div className="flex items-start justify-between mb-1">
+                    <span className={`text-[14px] leading-tight ${textStyle}`}>{exam.subject}</span>
+                    <div className="flex-shrink-0 ml-2 mt-0.5">
+                      {badge}
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between text-xs mt-2">
+                    <span className="text-gray-400 flex items-center gap-1.5 bg-gray-900/50 px-2 py-1 rounded-md">
+                      <Calendar size={10} className="text-gray-500"/>
+                      {formatDate(exam.date)} • {formatDay(exam.date)}
+                    </span>
+                    
+                    {index > 0 && statusData.status !== 'completed' && (
+                      <span className={`px-2 py-1 rounded-md font-medium ${gapDays > 0 ? 'bg-indigo-500/10 text-indigo-300' : 'bg-red-500/10 text-red-300'}`}>
+                        {gapDays > 0 ? `${toBnNum(gapDays)} দিন বন্ধ` : 'কোনো বন্ধ নেই'}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+      </div>
+      
+      <style dangerouslySetInnerHTML={{__html: `
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #374151; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4B5563; }
+      `}} />
+    </div>
+  );
+};
+
+export default App;
