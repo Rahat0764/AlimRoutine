@@ -138,7 +138,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            margin-bottom: 20px;
             position: relative;
             z-index: 2;
         }
@@ -204,6 +204,53 @@
             white-space: nowrap;
             transition: opacity 0.3s;
         }
+
+        /* --- Install Button: Unique Purple/Indigo Style --- */
+        .install-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15));
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(168, 85, 247, 0.35);
+            color: #e9d5ff;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.1);
+            flex-shrink: 0;
+        }
+
+        .install-btn:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.3));
+            border-color: rgba(168, 85, 247, 0.6);
+            color: #ffffff;
+            transform: scale(1.03);
+            box-shadow: 0 6px 16px rgba(168, 85, 247, 0.25);
+        }
+
+        .install-btn:active {
+            transform: scale(0.97);
+        }
+
+        [data-theme="light"] .install-btn {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(168, 85, 247, 0.08));
+            border-color: rgba(168, 85, 247, 0.3);
+            color: #7e22ce;
+            box-shadow: none;
+        }
+
+        [data-theme="light"] .install-btn:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15));
+            border-color: rgba(168, 85, 247, 0.5);
+            color: #581c87;
+        }
+        /* ----------------------------- */
 
         .next-exam-label {
             font-size: 11px;
@@ -722,14 +769,32 @@
         updateTimer();
     }
 
-    btnScience.addEventListener('click', () => { setGroup('Science'); localStorage.setItem('group', 'Science'); });
-    btnArts.addEventListener('click', () => { setGroup('Arts'); localStorage.setItem('group', 'Arts'); });
+    // Android App Sync
+    function syncWithAndroid() {
+        if(window.AndroidApp) {
+            window.AndroidApp.savePreferences(currentGroup, artsOptional);
+        }
+    }
+
+    btnScience.addEventListener('click', () => { 
+        setGroup('Science'); 
+        localStorage.setItem('group', 'Science'); 
+        syncWithAndroid();
+    });
+    
+    btnArts.addEventListener('click', () => { 
+        setGroup('Arts'); 
+        localStorage.setItem('group', 'Arts'); 
+        syncWithAndroid();
+    });
+    
     selectOptional.addEventListener('change', e => {
         artsOptional = e.target.value;
         localStorage.setItem('optional', artsOptional);
         currentRoutine = buildArts(artsOptional);
         renderList();
         updateTimer();
+        syncWithAndroid();
     });
 
     function renderList() {
@@ -790,8 +855,17 @@
         const upcoming = currentRoutine.filter(e => getStatus(e.date, now).status === 'upcoming');
         const next = upcoming[0] || null;
 
+        // এই এইচটিএমএল টি শুধু ওয়েবসাইট ভিজিটরদের দেখাবে, অ্যাপের ভেতর হাইড থাকবে
+        const installBtnHTML = window.AndroidApp ? '' : `
+            <a href="https://github.com/Rahat0764/AlimRoutine/releases/download/v1.0/AlimRoutine_V1.apk" class="install-btn" target="_blank" rel="noopener noreferrer">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Install App
+            </a>
+        `;
+
         if (!next) {
             nextExamContent.innerHTML = `
+            <div style="position: absolute; right: 16px; top: 16px; z-index: 10;">${installBtnHTML}</div>
             <div class="finished-state">
                 <div class="finished-icon">🎉</div>
                 <div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:4px">সব পরীক্ষা শেষ!</div>
@@ -824,7 +898,10 @@
 
         nextExamContent.innerHTML = `
         <div class="next-exam-label"><div class="pulse-dot"></div> পরবর্তী পরীক্ষা</div>
-        <div class="exam-title">${next.subject}</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 2; animation: slideUp 0.5s ease both; margin-bottom: 4px;">
+            <div class="exam-title" style="animation: none; margin-bottom: 0;">${next.subject}</div>
+            ${installBtnHTML}
+        </div>
         <div class="exam-date-line">${SVG.cal14} ${fmtDate(next.date)} • ${fmtDay(next.date)} (সকাল ১০:০০)</div>
         <div class="countdown-grid">${boxes}</div>`;
     }
