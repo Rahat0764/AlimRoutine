@@ -1,307 +1,835 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="bn" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0f172a" id="theme-meta">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="আলিম রুটিন">
     <title>আলিম রুটিন ২০২৬</title>
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #374151; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4B5563; }
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --bg-card-hover: #263348;
+            --border-color: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-blue-light: #60a5fa;
+            --accent-glow: rgba(59,130,246,0.15);
+            --header-from: #1e3a5f;
+            --header-to: #0f172a;
+            --toggle-bg: #334155;
+            --toggle-circle: #94a3b8;
+            --scrollbar-thumb: #334155;
+            --tab-bg: #0f172a;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f0f4ff;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f8faff;
+            --border-color: #dde5f4;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --accent-blue: #2563eb;
+            --accent-blue-light: #3b82f6;
+            --accent-glow: rgba(37,99,235,0.1);
+            --header-from: #1d4ed8;
+            --header-to: #1e3a6e;
+            --toggle-bg: #bfdbfe;
+            --toggle-circle: #1d4ed8;
+            --scrollbar-thumb: #bfdbfe;
+            --tab-bg: #e8eef8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.4s ease, color 0.4s ease;
+            min-height: 100dvh;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 50% at 50% -20%, var(--accent-glow), transparent);
+            pointer-events: none;
+            z-index: 0;
+            transition: background 0.4s ease;
+        }
+
+        .app-wrapper {
+            width: 100%;
+            max-width: 420px;
+            height: 100dvh;
+            max-height: 780px;
+            background: var(--bg-secondary);
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 32px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.03) inset;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+            transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+            animation: wrapperIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+
+        @keyframes wrapperIn {
+            from { opacity: 0; transform: translateY(24px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @media (max-width: 480px) {
+            .app-wrapper {
+                border-radius: 0;
+                max-height: none;
+                height: 100dvh;
+                border-left: none;
+                border-right: none;
+            }
+            body { padding: 0; }
+        }
+
+        .header-section {
+            background: linear-gradient(160deg, var(--header-from), var(--header-to));
+            padding: 16px 16px 20px;
+            position: relative;
+            flex-shrink: 0;
+            transition: background 0.4s ease;
+            overflow: hidden;
+        }
+
+        .header-section::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .dev-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0,0,0,0.25);
+            backdrop-filter: blur(12px);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            color: #bfdbfe;
+            border: 1px solid rgba(96,165,250,0.25);
+            text-decoration: none;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .dev-badge:hover { background: rgba(0,0,0,0.4); transform: scale(1.03); }
+        .dev-badge:active { transform: scale(0.97); }
+
+        .dark-toggle {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(0,0,0,0.25);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px;
+            padding: 5px 10px 5px 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            flex-shrink: 0;
+        }
+
+        .dark-toggle:hover { background: rgba(0,0,0,0.38); transform: scale(1.04); }
+        .dark-toggle:active { transform: scale(0.96); }
+
+        .toggle-icon-wrap {
+            width: 18px;
+            height: 18px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .toggle-icon-wrap svg {
+            position: absolute;
+            inset: 0;
+            transition: opacity 0.3s ease, transform 0.35s ease;
+        }
+
+        [data-theme="dark"] .icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
+        [data-theme="dark"] .icon-sun  { opacity: 0; transform: rotate(90deg) scale(0.5); }
+        [data-theme="light"] .icon-moon { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+        [data-theme="light"] .icon-sun  { opacity: 1; transform: rotate(0deg) scale(1); }
+
+        .toggle-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #bfdbfe;
+            pointer-events: none;
+            white-space: nowrap;
+            transition: opacity 0.3s;
+        }
+
+        .next-exam-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            color: #93c5fd;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
+            background: #60a5fa;
+            border-radius: 50%;
+            animation: pulseGlow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(96,165,250,0.5); }
+            50% { opacity: 0.7; transform: scale(1.2); box-shadow: 0 0 0 4px rgba(96,165,250,0); }
+        }
+
+        .exam-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 2;
+            animation: slideUp 0.5s ease both;
+        }
+
+        .exam-date-line {
+            font-size: 12px;
+            color: #93c5fd;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            position: relative;
+            z-index: 2;
+            font-weight: 500;
+            animation: slideUp 0.5s ease 0.05s both;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .countdown-box {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 10px 4px 8px;
+            text-align: center;
+            transition: transform 0.15s ease, background 0.15s ease;
+            animation: boxPop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+
+        .countdown-box:nth-child(1) { animation-delay: 0.1s; }
+        .countdown-box:nth-child(2) { animation-delay: 0.15s; }
+        .countdown-box:nth-child(3) { animation-delay: 0.2s; }
+        .countdown-box:nth-child(4) { animation-delay: 0.25s; }
+
+        @keyframes boxPop {
+            from { opacity: 0; transform: scale(0.7); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .countdown-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1;
+            display: block;
+        }
+
+        .countdown-label {
+            font-size: 9px;
+            color: #93c5fd;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .finished-state {
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            z-index: 2;
+            animation: slideUp 0.5s ease both;
+        }
+
+        .finished-icon {
+            font-size: 36px;
+            margin-bottom: 6px;
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        .tabs-section {
+            padding: 10px 14px 6px;
+            flex-shrink: 0;
+        }
+
+        .tab-bar {
+            display: flex;
+            gap: 4px;
+            padding: 4px;
+            background: var(--tab-bg);
+            border-radius: 14px;
+            margin-bottom: 8px;
+            transition: background 0.4s ease;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34,1.2,0.64,1);
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-blue);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(59,130,246,0.4);
+            transform: scale(1.02);
+        }
+
+        .tab-btn.inactive {
+            background: transparent;
+            color: var(--text-muted);
+        }
+
+        .tab-btn.inactive:hover {
+            color: var(--text-secondary);
+            background: rgba(255,255,255,0.04);
+        }
+
+        .select-wrapper {
+            position: relative;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
+            max-height: 0;
+            opacity: 0;
+        }
+
+        .select-wrapper.visible {
+            max-height: 50px;
+            opacity: 1;
+        }
+
+        .styled-select {
+            width: 100%;
+            appearance: none;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 13px;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            border-radius: 12px;
+            padding: 8px 36px 8px 14px;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.4s;
+        }
+
+        .styled-select:focus { border-color: var(--accent-blue); }
+
+        .select-arrow {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .list-section {
+            flex: 1;
+            overflow-y: auto;
+            padding: 4px 14px 16px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--scrollbar-thumb) transparent;
+        }
+
+        .list-section::-webkit-scrollbar { width: 3px; }
+        .list-section::-webkit-scrollbar-track { background: transparent; }
+        .list-section::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 10px; }
+
+        .list-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            padding-left: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .exam-card {
+            padding: 12px 14px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 8px;
+            background: var(--bg-card);
+            transition: all 0.3s ease;
+            animation: cardIn 0.4s ease both;
+            cursor: default;
+        }
+
+        .exam-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateX(2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .exam-card.card-completed {
+            opacity: 0.5;
+            background: transparent;
+        }
+
+        .exam-card.card-ongoing {
+            background: rgba(16,185,129,0.06);
+            border-color: rgba(16,185,129,0.3);
+        }
+
+        .exam-card.card-next {
+            background: rgba(59,130,246,0.07);
+            border-color: rgba(59,130,246,0.4);
+            box-shadow: 0 0 0 1px rgba(59,130,246,0.1), 0 8px 24px rgba(59,130,246,0.1);
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .subject-name {
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--text-primary);
+            transition: color 0.3s;
+        }
+
+        .subject-name.completed { text-decoration: line-through; color: var(--text-muted); }
+        .subject-name.ongoing { color: #34d399; }
+        .subject-name.next { color: var(--accent-blue-light); }
+
+        .badge {
+            flex-shrink: 0;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
+            margin-top: 1px;
+        }
+
+        .badge-done { color: #34d399; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2); }
+        .badge-ongoing { color: #34d399; background: rgba(52,211,153,0.08); animation: pulseText 1.5s ease infinite; }
+        .badge-next { color: #ffffff; background: var(--accent-blue); box-shadow: 0 2px 8px rgba(59,130,246,0.35); }
+        .badge-days { color: var(--text-muted); background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .card-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .date-pill {
+            font-size: 11px;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.04);
+            padding: 3px 8px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid var(--border-color);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        [data-theme="light"] .date-pill {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .gap-pill {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 8px;
+        }
+
+        .gap-positive { color: #818cf8; background: rgba(99,102,241,0.1); }
+        .gap-zero { color: #f87171; background: rgba(248,113,113,0.1); }
+
+        .theme-transition * {
+            transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease !important;
+        }
     </style>
 </head>
-<body class="bg-gray-900 font-sans text-white min-h-screen flex items-center justify-center p-4">
+<body>
 
-    
-    <div class="w-full max-w-md bg-gray-800 rounded-3xl shadow-2xl overflow-hidden border border-gray-700 relative">
-        
-        
-        <div class="absolute top-4 right-4 z-20">
-            <a href="https://linkdin.com/in/RahatAhmedX" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 bg-black/30 hover:bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full text-xs text-blue-200 transition-all border border-blue-500/30">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                Developed by <span class="font-bold text-blue-300">Rahat</span>
+<div class="app-wrapper" id="appWrapper">
+
+    <div class="header-section" id="headerSection">
+        <div class="top-bar">
+            <a href="https://linkedin.com/in/RahatAhmedX" target="_blank" rel="noopener noreferrer" class="dev-badge">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Developed by <strong style="color:#bfdbfe">Rahat</strong>
             </a>
+            <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">
+                <div class="toggle-icon-wrap">
+                    <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </div>
+                <span class="toggle-label" id="toggleLabel">ডার্ক মোড</span>
+            </button>
         </div>
 
-        
-        <div id="next-exam-section" class="bg-gradient-to-br from-blue-700 to-slate-900 p-6 rounded-b-3xl shadow-lg relative z-10 pt-14">
-            
-        </div>
-
-        
-        <div class="px-5 pt-5 pb-2">
-            <div class="flex gap-2 p-1 bg-gray-900 rounded-xl mb-3">
-                <button id="btn-science" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-all bg-blue-600 text-white shadow-md">Science</button>
-                <button id="btn-arts" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-all text-gray-400 hover:text-gray-200">Arts</button>
-            </div>
-
-            <div id="arts-options" class="relative hidden">
-                <select id="select-optional" class="w-full appearance-none bg-gray-700/50 border border-gray-600 text-gray-200 text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-blue-500 font-medium">
-                    <option value="Civics">ঐচ্ছিক: পৌরনীতি ও সুশাসন</option>
-                    <option value="Economics">ঐচ্ছিক: অর্থনীতি</option>
-                </select>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute right-4 top-3 text-gray-400 pointer-events-none"><path d="m6 9 6 6 6-6"/></svg>
-            </div>
-        </div>
-
-        
-        <div class="px-4 pb-4 h-[350px] overflow-y-auto custom-scrollbar">
-            <h3 id="routine-title" class="text-xs font-semibold text-gray-400 mb-3 pl-1 flex items-center gap-2 mt-2">
-                
-            </h3>
-            <div id="routine-list" class="space-y-2.5">
-                
-            </div>
-        </div>
-
+        <div id="nextExamContent"></div>
     </div>
 
-    
-    <script>
-        
-        const toBnNum = (num) => num.toString().replace(/\d/g, d => "০১২৩৪৫৬৭৮৯"[d]);
-        const formatDate = (dateStr) => new Date(dateStr).toLocaleDateString('bn-BD', { day: 'numeric', month: 'short' });
-        const formatDay = (dateStr) => new Date(dateStr).toLocaleDateString('bn-BD', { weekday: 'long' });
+    <div class="tabs-section">
+        <div class="tab-bar">
+            <button class="tab-btn active" id="btnScience">Science</button>
+            <button class="tab-btn inactive" id="btnArts">Arts</button>
+        </div>
+        <div class="select-wrapper" id="artsOptions">
+            <select class="styled-select" id="selectOptional">
+                <option value="Civics">ঐচ্ছিক: পৌরনীতি ও সুশাসন</option>
+                <option value="Economics">ঐচ্ছিক: অর্থনীতি</option>
+            </select>
+            <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+    </div>
 
-        
-        const ICONS = {
-            clock: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-300 animate-pulse"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
-            calendar14: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`,
-            calendar10: `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`,
-            check: `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-green-400 mb-3"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>`,
-            alert: `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>`,
-            book: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`
-        };
+    <div class="list-section">
+        <div class="list-title" id="routineTitle"></div>
+        <div id="routineList"></div>
+    </div>
 
-        // Routine Data
-        const scienceRoutine = [
-            { id: 's1', subject: "কুরআন মাজিদ", date: "2026-07-02T10:00:00" },
-            { id: 's2', subject: "আরবি সাহিত্য (বিজ্ঞান)", date: "2026-07-04T10:00:00" },
-            { id: 's3', subject: "বাংলা ১ম পত্র", date: "2026-07-06T10:00:00" },
-            { id: 's4', subject: "বাংলা ২য় পত্র", date: "2026-07-08T10:00:00" },
-            { id: 's5', subject: "ইংরেজি ১ম পত্র", date: "2026-07-11T10:00:00" },
-            { id: 's6', subject: "ইংরেজি ২য় পত্র", date: "2026-07-13T10:00:00" },
-            { id: 's7', subject: "হাদিস ও উসুলুল হাদিস", date: "2026-07-16T10:00:00" },
-            { id: 's8', subject: "ফিকহ", date: "2026-07-18T10:00:00" },
-            { id: 's9', subject: "তথ্য ও যোগাযোগ প্রযুক্তি", date: "2026-07-22T10:00:00" },
-            { id: 's10', subject: "পদার্থবিজ্ঞান ১ম পত্র", date: "2026-07-25T10:00:00" },
-            { id: 's11', subject: "পদার্থবিজ্ঞান ২য় পত্র", date: "2026-07-27T10:00:00" },
-            { id: 's12', subject: "রসায়ন ১ম পত্র", date: "2026-07-29T10:00:00" },
-            { id: 's13', subject: "রসায়ন ২য় পত্র", date: "2026-08-01T10:00:00" },
-            { id: 's14', subject: "জীববিজ্ঞান ১ম পত্র", date: "2026-08-02T10:00:00" },
-            { id: 's15', subject: "জীববিজ্ঞান ২য় পত্র", date: "2026-08-04T10:00:00" },
-            { id: 's16', subject: "উচ্চতর গণিত ১ম পত্র", date: "2026-08-06T10:00:00" },
-            { id: 's17', subject: "উচ্চতর গণিত ২য় পত্র", date: "2026-08-08T10:00:00" }
-        ].sort((a, b) => new Date(a.date) - new Date(b.date));
+</div>
 
-        const buildArtsRoutine = (optionalSub) => {
-            let artsBase = [
-                { id: 'a1', subject: "কুরআন মাজিদ", date: "2026-07-02T10:00:00" },
-                { id: 'a2', subject: "আরবি ১ম পত্র (সাধারণ)", date: "2026-07-04T10:00:00" },
-                { id: 'a3', subject: "বাংলা ১ম পত্র", date: "2026-07-06T10:00:00" },
-                { id: 'a4', subject: "বাংলা ২য় পত্র", date: "2026-07-08T10:00:00" },
-                { id: 'a5', subject: "ইংরেজি ১ম পত্র", date: "2026-07-11T10:00:00" },
-                { id: 'a6', subject: "ইংরেজি ২য় পত্র", date: "2026-07-13T10:00:00" },
-                { id: 'a7', subject: "আরবি ২য় পত্র", date: "2026-07-15T10:00:00" },
-                { id: 'a8', subject: "হাদিস ও উসুলুল হাদিস", date: "2026-07-16T10:00:00" },
-                { id: 'a9', subject: "আল ফিকহ ১ম পত্র", date: "2026-07-18T10:00:00" },
-                { id: 'a10', subject: "আল ফিকহ ২য় পত্র", date: "2026-07-19T10:00:00" },
-                { id: 'a11', subject: "তথ্য ও যোগাযোগ প্রযুক্তি", date: "2026-07-22T10:00:00" },
-                { id: 'a12', subject: "বালাগাত ও মানতিক", date: "2026-07-25T10:00:00" },
-                { id: 'a13', subject: "ইসলামের ইতিহাস", date: "2026-07-27T10:00:00" }
-            ];
+<script>
+    const toBnNum = n => n.toString().replace(/\d/g, d => "০১২৩৪৫৬৭৮৯"[d]);
+    const fmtDate = d => new Date(d).toLocaleDateString('bn-BD', { day: 'numeric', month: 'short' });
+    const fmtDay = d => new Date(d).toLocaleDateString('bn-BD', { weekday: 'long' });
 
-            if (optionalSub === 'Civics') {
-                artsBase.push(
-                    { id: 'a14c', subject: "পৌরনীতি ও সুশাসন ১ম পত্র", date: "2026-07-29T10:00:00" },
-                    { id: 'a15c', subject: "পৌরনীতি ও সুশাসন ২য় পত্র", date: "2026-08-01T10:00:00" }
-                );
-            } else {
-                artsBase.push(
-                    { id: 'a14e', subject: "অর্থনীতি ১ম পত্র", date: "2026-07-29T10:00:00" },
-                    { id: 'a15e', subject: "অর্থনীতি ২য় পত্র", date: "2026-08-01T10:00:00" }
-                );
-            }
-            return artsBase.sort((a, b) => new Date(a.date) - new Date(b.date));
-        };
+    const SVG = {
+        book: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+        cal: `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`,
+        cal14: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`
+    };
 
-        
-        let currentGroup = 'Science';
-        let artsOptional = 'Civics';
-        let currentRoutine = scienceRoutine;
+    const scienceRoutine = [
+        { id:'s1', subject:"কুরআন মাজিদ", date:"2026-07-02T10:00:00" },
+        { id:'s2', subject:"আরবি সাহিত্য (বিজ্ঞান)", date:"2026-07-04T10:00:00" },
+        { id:'s3', subject:"বাংলা ১ম পত্র", date:"2026-07-06T10:00:00" },
+        { id:'s4', subject:"বাংলা ২য় পত্র", date:"2026-07-08T10:00:00" },
+        { id:'s5', subject:"ইংরেজি ১ম পত্র", date:"2026-07-11T10:00:00" },
+        { id:'s6', subject:"ইংরেজি ২য় পত্র", date:"2026-07-13T10:00:00" },
+        { id:'s7', subject:"হাদিস ও উসুলুল হাদিস", date:"2026-07-16T10:00:00" },
+        { id:'s8', subject:"ফিকহ", date:"2026-07-18T10:00:00" },
+        { id:'s9', subject:"তথ্য ও যোগাযোগ প্রযুক্তি", date:"2026-07-22T10:00:00" },
+        { id:'s10', subject:"পদার্থবিজ্ঞান ১ম পত্র", date:"2026-07-25T10:00:00" },
+        { id:'s11', subject:"পদার্থবিজ্ঞান ২য় পত্র", date:"2026-07-27T10:00:00" },
+        { id:'s12', subject:"রসায়ন ১ম পত্র", date:"2026-07-29T10:00:00" },
+        { id:'s13', subject:"রসায়ন ২য় পত্র", date:"2026-08-01T10:00:00" },
+        { id:'s14', subject:"জীববিজ্ঞান ১ম পত্র", date:"2026-08-02T10:00:00" },
+        { id:'s15', subject:"জীববিজ্ঞান ২য় পত্র", date:"2026-08-04T10:00:00" },
+        { id:'s16', subject:"উচ্চতর গণিত ১ম পত্র", date:"2026-08-06T10:00:00" },
+        { id:'s17', subject:"উচ্চতর গণিত ২য় পত্র", date:"2026-08-08T10:00:00" }
+    ].sort((a,b) => new Date(a.date)-new Date(b.date));
 
-        
-        const getStatus = (examDateStr, currentTime) => {
-            const examDate = new Date(examDateStr);
-            const diffMs = examDate - currentTime;
-            
-            if (diffMs < 0) {
-                const examEnd = new Date(examDate.getTime() + 3 * 60 * 60 * 1000);
-                if (currentTime > examEnd) return { status: 'completed', diffMs: 0 };
-                return { status: 'ongoing', diffMs: 0 };
-            }
-
-            const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
-
-            return { status: 'upcoming', days, hours, minutes, seconds, diffMs };
-        };
-
-        const calculateGap = (currentDate, prevDate) => {
-            const d1 = new Date(prevDate);
-            const d2 = new Date(currentDate);
-            d1.setHours(0, 0, 0, 0);
-            d2.setHours(0, 0, 0, 0);
-            const diffDays = Math.floor((d2 - d1) / (1000 * 60 * 60 * 24)) - 1;
-            return diffDays > 0 ? diffDays : 0;
-        };
-
-        
-        const btnScience = document.getElementById('btn-science');
-        const btnArts = document.getElementById('btn-arts');
-        const artsOptionsDiv = document.getElementById('arts-options');
-        const selectOptional = document.getElementById('select-optional');
-        const nextExamSection = document.getElementById('next-exam-section');
-        const routineListContainer = document.getElementById('routine-list');
-        const routineTitle = document.getElementById('routine-title');
-
-        function setGroup(group) {
-            currentGroup = group;
-            if (group === 'Science') {
-                btnScience.className = "flex-1 py-2 text-sm font-semibold rounded-lg transition-all bg-blue-600 text-white shadow-md";
-                btnArts.className = "flex-1 py-2 text-sm font-semibold rounded-lg transition-all text-gray-400 hover:text-gray-200";
-                artsOptionsDiv.classList.add('hidden');
-                currentRoutine = scienceRoutine;
-            } else {
-                btnArts.className = "flex-1 py-2 text-sm font-semibold rounded-lg transition-all bg-blue-600 text-white shadow-md";
-                btnScience.className = "flex-1 py-2 text-sm font-semibold rounded-lg transition-all text-gray-400 hover:text-gray-200";
-                artsOptionsDiv.classList.remove('hidden');
-                currentRoutine = buildArtsRoutine(artsOptional);
-            }
-            renderRoutineList();
-            updateLiveTimer();
+    const buildArts = opt => {
+        let base = [
+            { id:'a1', subject:"কুরআন মাজিদ", date:"2026-07-02T10:00:00" },
+            { id:'a2', subject:"আরবি ১ম পত্র (সাধারণ)", date:"2026-07-04T10:00:00" },
+            { id:'a3', subject:"বাংলা ১ম পত্র", date:"2026-07-06T10:00:00" },
+            { id:'a4', subject:"বাংলা ২য় পত্র", date:"2026-07-08T10:00:00" },
+            { id:'a5', subject:"ইংরেজি ১ম পত্র", date:"2026-07-11T10:00:00" },
+            { id:'a6', subject:"ইংরেজি ২য় পত্র", date:"2026-07-13T10:00:00" },
+            { id:'a7', subject:"আরবি ২য় পত্র", date:"2026-07-15T10:00:00" },
+            { id:'a8', subject:"হাদিস ও উসুলুল হাদিস", date:"2026-07-16T10:00:00" },
+            { id:'a9', subject:"আল ফিকহ ১ম পত্র", date:"2026-07-18T10:00:00" },
+            { id:'a10', subject:"আল ফিকহ ২য় পত্র", date:"2026-07-19T10:00:00" },
+            { id:'a11', subject:"তথ্য ও যোগাযোগ প্রযুক্তি", date:"2026-07-22T10:00:00" },
+            { id:'a12', subject:"বালাগাত ও মানতিক", date:"2026-07-25T10:00:00" },
+            { id:'a13', subject:"ইসলামের ইতিহাস", date:"2026-07-27T10:00:00" }
+        ];
+        if (opt === 'Civics') {
+            base.push(
+                { id:'a14c', subject:"পৌরনীতি ও সুশাসন ১ম পত্র", date:"2026-07-29T10:00:00" },
+                { id:'a15c', subject:"পৌরনীতি ও সুশাসন ২য় পত্র", date:"2026-08-01T10:00:00" }
+            );
+        } else {
+            base.push(
+                { id:'a14e', subject:"অর্থনীতি ১ম পত্র", date:"2026-07-29T10:00:00" },
+                { id:'a15e', subject:"অর্থনীতি ২য় পত্র", date:"2026-08-01T10:00:00" }
+            );
         }
+        return base.sort((a,b) => new Date(a.date)-new Date(b.date));
+    };
 
-        btnScience.addEventListener('click', () => setGroup('Science'));
-        btnArts.addEventListener('click', () => setGroup('Arts'));
-        selectOptional.addEventListener('change', (e) => {
-            artsOptional = e.target.value;
-            currentRoutine = buildArtsRoutine(artsOptional);
-            renderRoutineList();
-            updateLiveTimer();
-        });
+    let currentGroup = 'Science';
+    let artsOptional = 'Civics';
+    let currentRoutine = scienceRoutine;
 
-        
-        function renderRoutineList() {
-            const currentTime = new Date();
-            const upcomingExams = currentRoutine.filter(exam => getStatus(exam.date, currentTime).status === 'upcoming');
-            const nextExam = upcomingExams.length > 0 ? upcomingExams[0] : null;
 
-            routineTitle.innerHTML = `${ICONS.book} সম্পূর্ণ রুটিন (${toBnNum(currentRoutine.length)} বিষয়)`;
-            
-            let html = '';
-            currentRoutine.forEach((exam, index) => {
-                const statusData = getStatus(exam.date, currentTime);
-                const isNext = nextExam && nextExam.id === exam.id;
-                let gapDays = index > 0 ? calculateGap(exam.date, currentRoutine[index - 1].date) : 0;
-
-                let cardStyle = "bg-gray-800/80 border-gray-700";
-                let textStyle = "text-gray-200";
-                let badgeHTML = "";
-
-                if (statusData.status === 'completed') {
-                    cardStyle = "opacity-60 bg-gray-800/50 border-gray-800";
-                    textStyle = "text-gray-500 line-through";
-                    badgeHTML = `<span class="text-[10px] text-green-500 bg-green-500/10 px-2 py-0.5 rounded-full border border-green-500/20">সম্পন্ন</span>`;
-                } else if (statusData.status === 'ongoing') {
-                    cardStyle = "bg-green-900/20 border-green-500/40";
-                    textStyle = "text-green-400 font-bold";
-                    badgeHTML = `<span class="text-[10px] text-green-400 animate-pulse flex items-center gap-1">${ICONS.alert} চলছে</span>`;
-                } else if (isNext) {
-                    cardStyle = "bg-blue-900/30 border-blue-500/60 shadow-lg shadow-blue-900/20";
-                    textStyle = "text-blue-300 font-bold";
-                    badgeHTML = `<span class="text-[10px] text-blue-200 bg-blue-600 px-2 py-0.5 rounded-full shadow-sm">পরবর্তী</span>`;
-                } else {
-                    badgeHTML = `<span class="text-[10px] font-mono text-gray-400 bg-gray-700/50 px-2 py-0.5 rounded-full">${toBnNum(statusData.days)} দিন বাকি</span>`;
-                }
-
-                let gapBadgeHTML = "";
-                if (index > 0 && statusData.status !== 'completed') {
-                    gapBadgeHTML = `<span class="px-2 py-1 rounded-md font-medium ${gapDays > 0 ? 'bg-indigo-500/10 text-indigo-300' : 'bg-red-500/10 text-red-300'}">${gapDays > 0 ? `${toBnNum(gapDays)} দিন গ্যাপ` : 'কোনো গ্যাপ নেই'}</span>`;
-                }
-
-                html += `
-                <div class="p-3 rounded-2xl border transition-all ${cardStyle}">
-                    <div class="flex items-start justify-between mb-1">
-                        <span class="text-[14px] leading-tight ${textStyle}">${exam.subject}</span>
-                        <div class="flex-shrink-0 ml-2 mt-0.5">${badgeHTML}</div>
-                    </div>
-                    <div class="flex items-center justify-between text-xs mt-2">
-                        <span class="text-gray-400 flex items-center gap-1.5 bg-gray-900/50 px-2 py-1 rounded-md">
-                            ${ICONS.calendar10} ${formatDate(exam.date)} • ${formatDay(exam.date)}
-                        </span>
-                        ${gapBadgeHTML}
-                    </div>
-                </div>`;
-            });
-            routineListContainer.innerHTML = html;
+    const getStatus = (dateStr, now) => {
+        const d = new Date(dateStr);
+        const diff = d - now;
+        if (diff < 0) {
+            if (now > new Date(d.getTime() + 3*60*60*1000)) return { status: 'completed' };
+            return { status: 'ongoing' };
         }
+        return {
+            status: 'upcoming',
+            days: Math.floor(diff/(86400000)),
+            hours: Math.floor((diff%86400000)/3600000),
+            minutes: Math.floor((diff%3600000)/60000),
+            seconds: Math.floor((diff%60000)/1000),
+            diff
+        };
+    };
 
-        
-        function updateLiveTimer() {
-            const currentTime = new Date();
-            const upcomingExams = currentRoutine.filter(exam => getStatus(exam.date, currentTime).status === 'upcoming');
-            const nextExam = upcomingExams.length > 0 ? upcomingExams[0] : null;
+    const calcGap = (cur, prev) => {
+        const d1 = new Date(prev); d1.setHours(0,0,0,0);
+        const d2 = new Date(cur); d2.setHours(0,0,0,0);
+        return Math.max(0, Math.floor((d2-d1)/86400000) - 1);
+    };
 
-            let topHtml = `
-            <div class="flex justify-between items-center mb-5">
-                <h2 class="text-sm font-semibold tracking-wider text-blue-200 uppercase flex items-center gap-2">
-                    ${ICONS.clock} পরবর্তী পরীক্ষা
-                </h2>
+    const btnScience = document.getElementById('btnScience');
+    const btnArts = document.getElementById('btnArts');
+    const artsOptions = document.getElementById('artsOptions');
+    const selectOptional = document.getElementById('selectOptional');
+    const nextExamContent = document.getElementById('nextExamContent');
+    const routineList = document.getElementById('routineList');
+    const routineTitle = document.getElementById('routineTitle');
+    const darkToggle = document.getElementById('darkToggle');
+    const html = document.documentElement;
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    html.setAttribute('data-theme', savedTheme);
+    document.getElementById('toggleLabel').textContent = savedTheme === 'dark' ? 'ডার্ক মোড' : 'লাইট মোড';
+
+    darkToggle.addEventListener('click', () => {
+        const isDark = html.getAttribute('data-theme') === 'dark';
+        const newTheme = isDark ? 'light' : 'dark';
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        document.getElementById('theme-meta').setAttribute('content', newTheme === 'dark' ? '#0f172a' : '#f0f4ff');
+        document.getElementById('toggleLabel').textContent = newTheme === 'dark' ? 'ডার্ক মোড' : 'লাইট মোড';
+    });
+
+    function setGroup(g) {
+        currentGroup = g;
+        if (g === 'Science') {
+            btnScience.className = 'tab-btn active';
+            btnArts.className = 'tab-btn inactive';
+            artsOptions.classList.remove('visible');
+            currentRoutine = scienceRoutine;
+        } else {
+            btnArts.className = 'tab-btn active';
+            btnScience.className = 'tab-btn inactive';
+            artsOptions.classList.add('visible');
+            currentRoutine = buildArts(artsOptional);
+        }
+        renderList();
+        updateTimer();
+    }
+
+    btnScience.addEventListener('click', () => setGroup('Science'));
+    btnArts.addEventListener('click', () => setGroup('Arts'));
+    selectOptional.addEventListener('change', e => {
+        artsOptional = e.target.value;
+        currentRoutine = buildArts(artsOptional);
+        renderList();
+        updateTimer();
+    });
+
+    function renderList() {
+        const now = new Date();
+        const upcoming = currentRoutine.filter(e => getStatus(e.date, now).status === 'upcoming');
+        const next = upcoming[0] || null;
+
+        routineTitle.innerHTML = `${SVG.book} সম্পূর্ণ রুটিন (${toBnNum(currentRoutine.length)} বিষয়)`;
+
+        let html = '';
+        currentRoutine.forEach((exam, i) => {
+            const s = getStatus(exam.date, now);
+            const isNext = next && next.id === exam.id;
+            const gap = i > 0 ? calcGap(exam.date, currentRoutine[i-1].date) : 0;
+
+            let cardClass = 'exam-card';
+            let subjectClass = 'subject-name';
+            let badge = '';
+
+            if (s.status === 'completed') {
+                cardClass += ' card-completed';
+                subjectClass += ' completed';
+                badge = `<span class="badge badge-done">সম্পন্ন</span>`;
+            } else if (s.status === 'ongoing') {
+                cardClass += ' card-ongoing';
+                subjectClass += ' ongoing';
+                badge = `<span class="badge badge-ongoing">● চলছে</span>`;
+            } else if (isNext) {
+                cardClass += ' card-next';
+                subjectClass += ' next';
+                badge = `<span class="badge badge-next">পরবর্তী</span>`;
+            } else {
+                badge = `<span class="badge badge-days">${toBnNum(s.days)} দিন বাকি</span>`;
+            }
+
+            let gapBadge = '';
+            if (i > 0 && s.status !== 'completed') {
+                gapBadge = `<span class="gap-pill ${gap > 0 ? 'gap-positive' : 'gap-zero'}">${gap > 0 ? `${toBnNum(gap)} দিন গ্যাপ` : 'গ্যাপ নেই'}</span>`;
+            }
+
+            html += `
+            <div class="${cardClass}" style="animation-delay:${i*0.04}s">
+                <div class="card-top">
+                    <span class="${subjectClass}">${exam.subject}</span>
+                    ${badge}
+                </div>
+                <div class="card-bottom">
+                    <span class="date-pill">${SVG.cal} ${fmtDate(exam.date)} • ${fmtDay(exam.date)}</span>
+                    ${gapBadge}
+                </div>
             </div>`;
+        });
+        routineList.innerHTML = html;
+    }
 
-            if (nextExam) {
-                const status = getStatus(nextExam.date, currentTime);
-                const values = [status.days, status.hours, status.minutes, status.seconds];
-                const labels = ['দিন', 'ঘণ্টা', 'মিনিট', 'সেকেন্ড'];
-                
-                let boxes = values.map((val, idx) => `
-                    <div class="bg-white/10 backdrop-blur-md rounded-xl p-2 flex flex-col justify-center border border-white/10 shadow-inner">
-                        <span class="text-2xl font-bold font-mono text-white">${toBnNum(String(val).padStart(2, '0'))}</span>
-                        <span class="text-[10px] uppercase tracking-wide mt-1 text-blue-200">${labels[idx]}</span>
-                    </div>
-                `).join('');
+    function updateTimer() {
+        const now = new Date();
+        const upcoming = currentRoutine.filter(e => getStatus(e.date, now).status === 'upcoming');
+        const next = upcoming[0] || null;
 
-                topHtml += `
-                <div>
-                    <h1 class="text-2xl font-bold mb-1 leading-tight text-white">${nextExam.subject}</h1>
-                    <p class="text-blue-200 text-sm mb-6 flex items-center gap-2 font-medium">
-                        ${ICONS.calendar14} ${formatDate(nextExam.date)} • ${formatDay(nextExam.date)} (সকাল ১০:০০)
-                    </p>
-                    <div class="grid grid-cols-4 gap-2 text-center">
-                        ${boxes}
-                    </div>
-                </div>`;
-            } else {
-                topHtml += `
-                <div class="text-center py-6">
-                    ${ICONS.check}
-                    <h1 class="text-xl font-bold text-white">সব পরীক্ষা শেষ!</h1>
-                    <p class="text-sm text-gray-400 mt-2">আলহামদুলিল্লাহ, আপনার পরীক্ষা সম্পন্ন হয়েছে।</p>
-                </div>`;
-            }
-            nextExamSection.innerHTML = topHtml;
+        if (!next) {
+            nextExamContent.innerHTML = `
+            <div class="finished-state">
+                <div class="finished-icon">🎉</div>
+                <div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:4px">সব পরীক্ষা শেষ!</div>
+                <div style="font-size:12px;color:#93c5fd">আলহামদুলিল্লাহ, পরীক্ষা সম্পন্ন হয়েছে।</div>
+            </div>`;
+            return;
         }
 
-        
-        setGroup('Science'); 
-        setInterval(updateLiveTimer, 1000);
+        const s = getStatus(next.date, now);
+        const vals = [s.days, s.hours, s.minutes, s.seconds];
+        const labels = ['দিন','ঘণ্টা','মিনিট','সেকেন্ড'];
 
-    </script>
+        const existingTitle = nextExamContent.querySelector('.exam-title');
+        const existingGrid = nextExamContent.querySelector('.countdown-grid');
+        if (existingGrid && existingTitle && existingTitle.textContent === next.subject) {
+            const spans = nextExamContent.querySelectorAll('.countdown-value');
+            vals.forEach((v, i) => {
+                const txt = toBnNum(String(v).padStart(2,'0'));
+                if (spans[i] && spans[i].textContent !== txt) spans[i].textContent = txt;
+            });
+            return;
+        }
+
+        const boxes = vals.map((v, i) => `
+            <div class="countdown-box">
+                <span class="countdown-value">${toBnNum(String(v).padStart(2,'0'))}</span>
+                <span class="countdown-label">${labels[i]}</span>
+            </div>
+        `).join('');
+
+        nextExamContent.innerHTML = `
+        <div class="next-exam-label"><div class="pulse-dot"></div> পরবর্তী পরীক্ষা</div>
+        <div class="exam-title">${next.subject}</div>
+        <div class="exam-date-line">${SVG.cal14} ${fmtDate(next.date)} • ${fmtDay(next.date)} (সকাল ১০:০০)</div>
+        <div class="countdown-grid">${boxes}</div>`;
+    }
+
+    setGroup('Science');
+    setInterval(updateTimer, 1000);
+</script>
 </body>
 </html>
