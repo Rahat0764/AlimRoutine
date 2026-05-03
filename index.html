@@ -722,10 +722,11 @@
         updateTimer();
     }
 
-    btnScience.addEventListener('click', () => setGroup('Science'));
-    btnArts.addEventListener('click', () => setGroup('Arts'));
+    btnScience.addEventListener('click', () => { setGroup('Science'); localStorage.setItem('group', 'Science'); });
+    btnArts.addEventListener('click', () => { setGroup('Arts'); localStorage.setItem('group', 'Arts'); });
     selectOptional.addEventListener('change', e => {
         artsOptional = e.target.value;
+        localStorage.setItem('optional', artsOptional);
         currentRoutine = buildArts(artsOptional);
         renderList();
         updateTimer();
@@ -828,7 +829,11 @@
         <div class="countdown-grid">${boxes}</div>`;
     }
 
-    setGroup('Science');
+    const savedGroup = localStorage.getItem('group') || 'Science';
+    const savedOptional = localStorage.getItem('optional') || 'Civics';
+    artsOptional = savedOptional;
+    selectOptional.value = savedOptional;
+    setGroup(savedGroup);
     setInterval(updateTimer, 1000);
 </script>
 </body>
