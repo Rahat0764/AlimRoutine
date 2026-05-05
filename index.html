@@ -7,12 +7,11 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="আলিম রুটিন">
-    <title>আলিম রুটিন ২০২৬</title>
+    <meta name="apple-mobile-web-app-title" content="পরীক্ষার রুটিন">
+    <title>পরীক্ষার রুটিন ২০২৬</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-
     <style>
         :root {
             --bg-primary: #0f172a;
@@ -26,14 +25,18 @@
             --accent-blue: #3b82f6;
             --accent-blue-light: #60a5fa;
             --accent-glow: rgba(59,130,246,0.15);
+            --accent-green: #10b981;
             --header-from: #1e3a5f;
             --header-to: #0f172a;
-            --toggle-bg: #334155;
-            --toggle-circle: #94a3b8;
             --scrollbar-thumb: #334155;
             --tab-bg: #0f172a;
+            
+            --btn-install-hsc-bg: #3b82f6;
+            --btn-install-hsc-hover: #2563eb;
+            --btn-install-alim-bg: #10b981;
+            --btn-install-alim-hover: #059669;
+            --btn-install-text: #ffffff;
         }
-
         [data-theme="light"] {
             --bg-primary: #f0f4ff;
             --bg-secondary: #ffffff;
@@ -46,21 +49,20 @@
             --accent-blue: #2563eb;
             --accent-blue-light: #3b82f6;
             --accent-glow: rgba(37,99,235,0.1);
+            --accent-green: #059669;
             --header-from: #1d4ed8;
             --header-to: #1e3a6e;
-            --toggle-bg: #bfdbfe;
-            --toggle-circle: #1d4ed8;
             --scrollbar-thumb: #bfdbfe;
             --tab-bg: #e8eef8;
-        }
 
+            --btn-install-hsc-bg: #2563eb;
+            --btn-install-hsc-hover: #1d4ed8;
+            --btn-install-alim-bg: #059669;
+            --btn-install-alim-hover: #047857;
+            --btn-install-text: #ffffff;
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        html, body {
-            height: 100%;
-            overflow: hidden;
-        }
-
+        html, body { height: 100%; overflow: hidden; }
         body {
             font-family: 'Noto Sans Bengali', sans-serif;
             background: var(--bg-primary);
@@ -72,7 +74,6 @@
             min-height: 100dvh;
             padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
         }
-
         body::before {
             content: '';
             position: fixed;
@@ -82,12 +83,11 @@
             z-index: 0;
             transition: background 0.4s ease;
         }
-
         .app-wrapper {
             width: 100%;
             max-width: 420px;
             height: 100dvh;
-            max-height: 780px;
+            max-height: 800px;
             background: var(--bg-secondary);
             border-radius: 28px;
             overflow: hidden;
@@ -100,32 +100,22 @@
             transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
             animation: wrapperIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
         }
-
         @keyframes wrapperIn {
             from { opacity: 0; transform: translateY(24px) scale(0.96); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
-
         @media (max-width: 480px) {
-            .app-wrapper {
-                border-radius: 0;
-                max-height: none;
-                height: 100dvh;
-                border-left: none;
-                border-right: none;
-            }
+            .app-wrapper { border-radius: 0; max-height: none; height: 100dvh; border-left: none; border-right: none; }
             body { padding: 0; }
         }
-
         .header-section {
             background: linear-gradient(160deg, var(--header-from), var(--header-to));
-            padding: 16px 16px 20px;
+            padding: 14px 16px 18px;
             position: relative;
             flex-shrink: 0;
             transition: background 0.4s ease;
             overflow: hidden;
         }
-
         .header-section::after {
             content: '';
             position: absolute;
@@ -133,475 +123,161 @@
             background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             pointer-events: none;
         }
-
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 2;
-        }
-
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; position: relative; z-index: 2; }
         .dev-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(0,0,0,0.25);
-            backdrop-filter: blur(12px);
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            color: #bfdbfe;
-            border: 1px solid rgba(96,165,250,0.25);
-            text-decoration: none;
-            transition: background 0.2s, transform 0.2s;
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(0,0,0,0.25); backdrop-filter: blur(12px);
+            padding: 5px 10px; border-radius: 20px; font-size: 11px;
+            color: #bfdbfe; border: 1px solid rgba(96,165,250,0.25);
+            text-decoration: none; transition: background 0.2s, transform 0.2s;
         }
-
         .dev-badge:hover { background: rgba(0,0,0,0.4); transform: scale(1.03); }
         .dev-badge:active { transform: scale(0.97); }
-
         .dark-toggle {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background: rgba(0,0,0,0.25);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 20px;
-            padding: 5px 10px 5px 8px;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.15s;
-            flex-shrink: 0;
+            display: flex; align-items: center; gap: 5px;
+            background: rgba(0,0,0,0.25); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.12); border-radius: 20px;
+            padding: 5px 10px 5px 8px; cursor: pointer;
+            transition: background 0.2s, transform 0.15s; flex-shrink: 0;
         }
-
         .dark-toggle:hover { background: rgba(0,0,0,0.38); transform: scale(1.04); }
         .dark-toggle:active { transform: scale(0.96); }
-
-        .toggle-icon-wrap {
-            width: 18px;
-            height: 18px;
-            position: relative;
-            flex-shrink: 0;
-        }
-
-        .toggle-icon-wrap svg {
-            position: absolute;
-            inset: 0;
-            transition: opacity 0.3s ease, transform 0.35s ease;
-        }
-
+        .toggle-icon-wrap { width: 18px; height: 18px; position: relative; flex-shrink: 0; }
+        .toggle-icon-wrap svg { position: absolute; inset: 0; transition: opacity 0.3s ease, transform 0.35s ease; }
         [data-theme="dark"] .icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
         [data-theme="dark"] .icon-sun  { opacity: 0; transform: rotate(90deg) scale(0.5); }
         [data-theme="light"] .icon-moon { opacity: 0; transform: rotate(-90deg) scale(0.5); }
         [data-theme="light"] .icon-sun  { opacity: 1; transform: rotate(0deg) scale(1); }
+        .toggle-label { font-size: 11px; font-weight: 600; color: #bfdbfe; white-space: nowrap; pointer-events: none; }
 
-        .toggle-label {
-            font-size: 11px;
-            font-weight: 600;
-            color: #bfdbfe;
-            pointer-events: none;
-            white-space: nowrap;
-            transition: opacity 0.3s;
-        }
-
-        /* --- Install Button: Unique Purple/Indigo Style --- */
-        .install-btn {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15));
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(168, 85, 247, 0.35);
-            color: #e9d5ff;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.1);
-            flex-shrink: 0;
-        }
-
-        .install-btn:hover {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.3));
-            border-color: rgba(168, 85, 247, 0.6);
-            color: #ffffff;
-            transform: scale(1.03);
-            box-shadow: 0 6px 16px rgba(168, 85, 247, 0.25);
-        }
-
-        .install-btn:active {
-            transform: scale(0.97);
-        }
-
-        [data-theme="light"] .install-btn {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(168, 85, 247, 0.08));
-            border-color: rgba(168, 85, 247, 0.3);
-            color: #7e22ce;
-            box-shadow: none;
-        }
-
-        [data-theme="light"] .install-btn:hover {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15));
-            border-color: rgba(168, 85, 247, 0.5);
-            color: #581c87;
-        }
-        /* ----------------------------- */
-
-        .next-exam-label {
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            color: #93c5fd;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .pulse-dot {
-            width: 6px;
-            height: 6px;
-            background: #60a5fa;
-            border-radius: 50%;
-            animation: pulseGlow 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(96,165,250,0.5); }
-            50% { opacity: 0.7; transform: scale(1.2); box-shadow: 0 0 0 4px rgba(96,165,250,0); }
-        }
-
-        .exam-title {
-            font-size: 20px;
-            font-weight: 800;
-            color: #ffffff;
-            line-height: 1.2;
-            margin-bottom: 4px;
-            position: relative;
-            z-index: 2;
-            animation: slideUp 0.5s ease both;
-        }
-
-        .exam-date-line {
-            font-size: 12px;
-            color: #93c5fd;
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            position: relative;
-            z-index: 2;
-            font-weight: 500;
-            animation: slideUp 0.5s ease 0.05s both;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .countdown-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .countdown-box {
-            background: rgba(255,255,255,0.08);
-            backdrop-filter: blur(8px);
+        .exam-switcher {
+            display: flex; gap: 3px;
+            background: rgba(0,0,0,0.28); backdrop-filter: blur(12px);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 14px;
-            padding: 10px 4px 8px;
-            text-align: center;
-            transition: transform 0.15s ease, background 0.15s ease;
-            animation: boxPop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+            border-radius: 22px; padding: 3px;
+            margin-bottom: 14px; position: relative; z-index: 2;
         }
-
-        .countdown-box:nth-child(1) { animation-delay: 0.1s; }
-        .countdown-box:nth-child(2) { animation-delay: 0.15s; }
-        .countdown-box:nth-child(3) { animation-delay: 0.2s; }
-        .countdown-box:nth-child(4) { animation-delay: 0.25s; }
-
-        @keyframes boxPop {
-            from { opacity: 0; transform: scale(0.7); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .countdown-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 22px;
-            font-weight: 700;
-            color: #ffffff;
-            line-height: 1;
-            display: block;
-        }
-
-        .countdown-label {
-            font-size: 9px;
-            color: #93c5fd;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-top: 4px;
-            display: block;
-        }
-
-        .finished-state {
-            text-align: center;
-            padding: 10px 0;
-            position: relative;
-            z-index: 2;
-            animation: slideUp 0.5s ease both;
-        }
-
-        .finished-icon {
-            font-size: 36px;
-            margin-bottom: 6px;
-            animation: bounce 1s ease infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-        }
-
-        .tabs-section {
-            padding: 10px 14px 6px;
-            flex-shrink: 0;
-        }
-
-        .tab-bar {
-            display: flex;
-            gap: 4px;
-            padding: 4px;
-            background: var(--tab-bg);
-            border-radius: 14px;
-            margin-bottom: 8px;
-            transition: background 0.4s ease;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
+        .exam-switch-btn {
+            flex: 1; padding: 6px 10px; font-size: 12px; font-weight: 700;
+            border: none; border-radius: 18px; cursor: pointer;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            letter-spacing: 0.03em;
             transition: all 0.3s cubic-bezier(0.34,1.2,0.64,1);
-            font-family: 'Noto Sans Bengali', sans-serif;
         }
-
-        .tab-btn.active {
-            background: var(--accent-blue);
-            color: #ffffff;
-            box-shadow: 0 4px 14px rgba(59,130,246,0.4);
-            transform: scale(1.02);
+        .exam-switch-btn.active-alim {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff; box-shadow: 0 4px 14px rgba(16,185,129,0.45); transform: scale(1.03);
         }
-
-        .tab-btn.inactive {
-            background: transparent;
-            color: var(--text-muted);
+        .exam-switch-btn.active-hsc {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: #fff; box-shadow: 0 4px 14px rgba(59,130,246,0.45); transform: scale(1.03);
         }
+        .exam-switch-btn.inactive-sw { background: transparent; color: rgba(255,255,255,0.45); }
+        .exam-switch-btn.inactive-sw:hover { color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.06); }
 
-        .tab-btn.inactive:hover {
-            color: var(--text-secondary);
-            background: rgba(255,255,255,0.04);
+        .install-btn {
+            display: flex; align-items: center; gap: 5px;
+            color: var(--btn-install-text); padding: 6px 14px; border-radius: 20px;
+            font-size: 10px; font-weight: 700; letter-spacing: 0.05em;
+            text-transform: uppercase; text-decoration: none;
+            transition: all 0.2s ease; flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,0.15);
         }
-
-        .select-wrapper {
-            position: relative;
-            overflow: hidden;
-            transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
-            max-height: 0;
-            opacity: 0;
+        .install-btn.hsc {
+            background: var(--btn-install-hsc-bg);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.35);
         }
-
-        .select-wrapper.visible {
-            max-height: 50px;
-            opacity: 1;
+        .install-btn.hsc:hover { background: var(--btn-install-hsc-hover); transform: scale(1.04); box-shadow: 0 6px 16px rgba(37,99,235,0.5); }
+        .install-btn.alim {
+            background: var(--btn-install-alim-bg);
+            box-shadow: 0 4px 12px rgba(16,185,129,0.35);
         }
+        .install-btn.alim:hover { background: var(--btn-install-alim-hover); transform: scale(1.04); box-shadow: 0 6px 16px rgba(16,185,129,0.5); }
+        .install-btn:active { transform: scale(0.97); }
 
-        .styled-select {
-            width: 100%;
-            appearance: none;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            font-size: 13px;
-            font-family: 'Noto Sans Bengali', sans-serif;
-            border-radius: 12px;
-            padding: 8px 36px 8px 14px;
-            outline: none;
-            cursor: pointer;
-            transition: border-color 0.2s, background 0.4s;
+        .next-exam-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: #93c5fd; text-transform: uppercase; display: flex; align-items: center; gap: 6px; margin-bottom: 10px; position: relative; z-index: 2; }
+        .next-exam-label.green-label { color: #6ee7b7; }
+        .pulse-dot { width: 6px; height: 6px; background: #60a5fa; border-radius: 50%; animation: pulseGlow 1.5s ease-in-out infinite; }
+        .pulse-dot.green-dot { background: #34d399; }
+        @keyframes pulseGlow { 0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(96,165,250,0.5); } 50% { opacity: 0.7; transform: scale(1.2); box-shadow: 0 0 0 4px rgba(96,165,250,0); } }
+        .exam-title { font-size: 19px; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 4px; position: relative; z-index: 2; animation: slideUp 0.4s ease both; }
+        .exam-date-line { font-size: 12px; color: #93c5fd; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; position: relative; z-index: 2; font-weight: 500; animation: slideUp 0.4s ease 0.05s both; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .countdown-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; position: relative; z-index: 2; }
+        .countdown-box { background: rgba(255,255,255,0.08); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 10px 4px 8px; text-align: center; animation: boxPop 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
+        .countdown-box:nth-child(1) { animation-delay: 0.05s; }
+        .countdown-box:nth-child(2) { animation-delay: 0.1s; }
+        .countdown-box:nth-child(3) { animation-delay: 0.15s; }
+        .countdown-box:nth-child(4) { animation-delay: 0.2s; }
+        @keyframes boxPop { from { opacity: 0; transform: scale(0.7); } to { opacity: 1; transform: scale(1); } }
+        .countdown-value { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; color: #fff; line-height: 1; display: block; }
+        .countdown-label { font-size: 9px; color: #93c5fd; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; display: block; }
+        .finished-state { text-align: center; padding: 10px 0; position: relative; z-index: 2; animation: slideUp 0.4s ease both; }
+        .finished-icon { font-size: 36px; margin-bottom: 6px; animation: bounce 1s ease infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+        .tabs-section { padding: 10px 14px 6px; flex-shrink: 0; }
+        .tab-bar { display: flex; gap: 4px; padding: 4px; background: var(--tab-bg); border-radius: 14px; margin-bottom: 8px; transition: background 0.4s ease; }
+        .tab-btn { flex: 1; padding: 8px; font-size: 13px; font-weight: 600; border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s cubic-bezier(0.34,1.2,0.64,1); font-family: 'Noto Sans Bengali', sans-serif; }
+        .tab-btn.active { background: var(--accent-blue); color: #fff; box-shadow: 0 4px 14px rgba(59,130,246,0.4); transform: scale(1.02); }
+        .tab-btn.active-green { background: var(--accent-green); color: #fff; box-shadow: 0 4px 14px rgba(16,185,129,0.4); transform: scale(1.02); }
+        .tab-btn.inactive { background: transparent; color: var(--text-muted); }
+        .tab-btn.inactive:hover { color: var(--text-secondary); background: rgba(255,255,255,0.04); }
+
+        .options-grid {
+            display: grid; gap: 8px;
+            position: relative; overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease, margin-bottom 0.3s ease;
+            max-height: 0; opacity: 0; margin-bottom: 0;
         }
-
+        .options-grid.visible { max-height: 70px; opacity: 1; margin-bottom: 6px; }
+        
+        .select-box { display: flex; flex-direction: column; gap: 4px; }
+        .select-box label { font-size: 10px; font-weight: 600; color: var(--text-muted); padding-left: 4px; }
+        .select-inner { position: relative; }
+        .styled-select { width: 100%; appearance: none; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 12px; font-weight: 500; font-family: 'Noto Sans Bengali', sans-serif; border-radius: 10px; padding: 8px 24px 8px 10px; outline: none; cursor: pointer; transition: border-color 0.2s, background 0.4s; }
         .styled-select:focus { border-color: var(--accent-blue); }
+        .select-arrow { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
 
-        .select-arrow {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            pointer-events: none;
-        }
+        .commerce-note { font-size: 11px; color: #a78bfa; background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.2); border-radius: 10px; padding: 7px 12px; margin-top: 6px; display: none; }
+        .commerce-note.visible { display: block; }
 
-        .list-section {
-            flex: 1;
-            overflow-y: auto;
-            padding: 4px 14px 16px;
-            scrollbar-width: thin;
-            scrollbar-color: var(--scrollbar-thumb) transparent;
-        }
-
+        .list-section { flex: 1; overflow-y: auto; padding: 4px 14px 16px; scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) transparent; }
         .list-section::-webkit-scrollbar { width: 3px; }
         .list-section::-webkit-scrollbar-track { background: transparent; }
         .list-section::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 10px; }
-
-        .list-title {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            padding-left: 4px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .exam-card {
-            padding: 12px 14px;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 8px;
-            background: var(--bg-card);
-            transition: all 0.3s ease;
-            animation: cardIn 0.4s ease both;
-            cursor: default;
-        }
-
-        .exam-card:hover {
-            background: var(--bg-card-hover);
-            transform: translateX(2px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-        }
-
-        .exam-card.card-completed {
-            opacity: 0.5;
-            background: transparent;
-        }
-
-        .exam-card.card-ongoing {
-            background: rgba(16,185,129,0.06);
-            border-color: rgba(16,185,129,0.3);
-        }
-
-        .exam-card.card-next {
-            background: rgba(59,130,246,0.07);
-            border-color: rgba(59,130,246,0.4);
-            box-shadow: 0 0 0 1px rgba(59,130,246,0.1), 0 8px 24px rgba(59,130,246,0.1);
-        }
-
-        @keyframes cardIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card-top {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-
-        .subject-name {
-            font-size: 14px;
-            font-weight: 600;
-            line-height: 1.3;
-            color: var(--text-primary);
-            transition: color 0.3s;
-        }
-
+        .list-title { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 10px; padding-left: 4px; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .exam-card { padding: 12px 14px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 8px; background: var(--bg-card); transition: all 0.3s ease; animation: cardIn 0.3s ease both; cursor: default; }
+        .exam-card:hover { background: var(--bg-card-hover); transform: translateX(2px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+        .exam-card.card-completed { opacity: 0.5; background: transparent; }
+        .exam-card.card-ongoing { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.3); }
+        .exam-card.card-next { background: rgba(59,130,246,0.07); border-color: rgba(59,130,246,0.4); box-shadow: 0 0 0 1px rgba(59,130,246,0.1), 0 8px 24px rgba(59,130,246,0.1); }
+        @keyframes cardIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+        .subject-name { font-size: 14px; font-weight: 600; line-height: 1.3; color: var(--text-primary); transition: color 0.3s; }
         .subject-name.completed { text-decoration: line-through; color: var(--text-muted); }
         .subject-name.ongoing { color: #34d399; }
         .subject-name.next { color: var(--accent-blue-light); }
-
-        .badge {
-            flex-shrink: 0;
-            font-size: 10px;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 20px;
-            margin-left: 8px;
-            margin-top: 1px;
-        }
-
+        .badge { flex-shrink: 0; font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 20px; margin-left: 8px; margin-top: 1px; }
         .badge-done { color: #34d399; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2); }
         .badge-ongoing { color: #34d399; background: rgba(52,211,153,0.08); animation: pulseText 1.5s ease infinite; }
-        .badge-next { color: #ffffff; background: var(--accent-blue); box-shadow: 0 2px 8px rgba(59,130,246,0.35); }
+        .badge-next { color: #fff; background: var(--accent-blue); box-shadow: 0 2px 8px rgba(59,130,246,0.35); }
         .badge-days { color: var(--text-muted); background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); }
-
-        @keyframes pulseText {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-
-        .card-bottom {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .date-pill {
-            font-size: 11px;
-            color: var(--text-muted);
-            background: rgba(255,255,255,0.04);
-            padding: 3px 8px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            border: 1px solid var(--border-color);
-            transition: background 0.3s, border-color 0.3s;
-        }
-
-        [data-theme="light"] .date-pill {
-            background: rgba(0,0,0,0.04);
-        }
-
-        .gap-pill {
-            font-size: 10px;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 8px;
-        }
-
+        @keyframes pulseText { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        .card-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px; }
+        .date-pill { font-size: 11px; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 3px 8px; border-radius: 8px; display: flex; align-items: center; gap: 4px; border: 1px solid var(--border-color); flex-wrap: wrap; }
+        [data-theme="light"] .date-pill { background: rgba(0,0,0,0.04); }
+        .gap-pill { font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 8px; }
         .gap-positive { color: #818cf8; background: rgba(99,102,241,0.1); }
         .gap-zero { color: #f87171; background: rgba(248,113,113,0.1); }
-
-        .theme-transition * {
-            transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease !important;
-        }
+        .time-tag { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; white-space: nowrap; }
+        .time-morning   { color: #fbbf24; background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.2); }
+        .time-afternoon { color: #fb923c; background: rgba(251,146,60,0.1); border: 1px solid rgba(251,146,60,0.2); }
     </style>
 </head>
 <body>
-
-<div class="app-wrapper" id="appWrapper">
-
-    <div class="header-section" id="headerSection">
+<div class="app-wrapper">
+    <div class="header-section">
         <div class="top-bar">
             <a href="https://linkedin.com/in/RahatAhmedX" target="_blank" rel="noopener noreferrer" class="dev-badge">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -610,308 +286,568 @@
             <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">
                 <div class="toggle-icon-wrap">
                     <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                    <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <svg class="icon-sun"  width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
                 </div>
                 <span class="toggle-label" id="toggleLabel">ডার্ক মোড</span>
             </button>
+        </div>
+
+        <div class="exam-switcher">
+            <button class="exam-switch-btn active-alim" id="btnAlim">আলিম ২০২৬</button>
+            <button class="exam-switch-btn inactive-sw"  id="btnHSC">HSC ২০২৬</button>
         </div>
 
         <div id="nextExamContent"></div>
     </div>
 
     <div class="tabs-section">
-        <div class="tab-bar">
-            <button class="tab-btn active" id="btnScience">Science</button>
-            <button class="tab-btn inactive" id="btnArts">Arts</button>
+        <div class="tab-bar" id="tabBar">
+            <button class="tab-btn" id="btnG1"></button>
+            <button class="tab-btn" id="btnG2"></button>
+            <button class="tab-btn" id="btnG3" style="display:none"></button>
         </div>
-        <div class="select-wrapper" id="artsOptions">
-            <select class="styled-select" id="selectOptional">
-                <option value="Civics">ঐচ্ছিক: পৌরনীতি ও সুশাসন</option>
-                <option value="Economics">ঐচ্ছিক: অর্থনীতি</option>
-            </select>
-            <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        
+        <div class="options-grid" id="optionalWrapper">
+            <div class="select-box" id="boxOpt1">
+                <label id="lblOpt1">৪র্থ বিষয় (আবশ্যিক)</label>
+                <div class="select-inner">
+                    <select class="styled-select" id="selectOpt1"></select>
+                    <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+            </div>
+            <div class="select-box" id="boxOpt2">
+                <label>ঐচ্ছিক বিষয়</label>
+                <div class="select-inner">
+                    <select class="styled-select" id="selectOpt2"></select>
+                    <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+            </div>
         </div>
+
+        <div class="commerce-note" id="commerceNote">💡 প্রকৌশল অঙ্কন ও ওয়ার্কশপ পত্রের পরীক্ষা নিজ কলেজে অনুষ্ঠিত হবে।</div>
     </div>
 
     <div class="list-section">
         <div class="list-title" id="routineTitle"></div>
         <div id="routineList"></div>
     </div>
-
 </div>
 
 <script>
-    const toBnNum = n => n.toString().replace(/\d/g, d => "০১২৩৪৫৬৭৮৯"[d]);
-    const fmtDate = d => new Date(d).toLocaleDateString('bn-BD', { day: 'numeric', month: 'short' });
-    const fmtDay = d => new Date(d).toLocaleDateString('bn-BD', { weekday: 'long' });
+const toBnNum = n => n.toString().replace(/\d/g, d => "০১২৩৪৫৬৭৮৯"[d]);
+const fmtDate = d => new Date(d).toLocaleDateString('bn-BD', { day:'numeric', month:'short' });
+const fmtDay  = d => new Date(d).toLocaleDateString('bn-BD', { weekday:'long' });
+const SVG = {
+    book:  `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+    cal:   `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`,
+    cal14: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`
+};
 
-    const SVG = {
-        book: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
-        cal: `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`,
-        cal14: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`
+const ALIM_SCIENCE = [
+    { id:'as1',  subject:"কুরআন মাজিদ",               date:"2026-07-02T10:00:00" },
+    { id:'as2',  subject:"আরবি সাহিত্য (বিজ্ঞান)",   date:"2026-07-04T10:00:00" },
+    { id:'as3',  subject:"বাংলা ১ম পত্র",              date:"2026-07-06T10:00:00" },
+    { id:'as4',  subject:"বাংলা ২য় পত্র",              date:"2026-07-08T10:00:00" },
+    { id:'as5',  subject:"ইংরেজি ১ম পত্র",             date:"2026-07-11T10:00:00" },
+    { id:'as6',  subject:"ইংরেজি ২য় পত্র",             date:"2026-07-13T10:00:00" },
+    { id:'as7',  subject:"হাদিস ও উসুলুল হাদিস",      date:"2026-07-16T10:00:00" },
+    { id:'as8',  subject:"ফিকহ",                       date:"2026-07-18T10:00:00" },
+    { id:'as9',  subject:"তথ্য ও যোগাযোগ প্রযুক্তি",  date:"2026-07-22T10:00:00" },
+    { id:'as10', subject:"পদার্থবিজ্ঞান ১ম পত্র",     date:"2026-07-25T10:00:00" },
+    { id:'as11', subject:"পদার্থবিজ্ঞান ২য় পত্র",     date:"2026-07-27T10:00:00" },
+    { id:'as12', subject:"রসায়ন ১ম পত্র",              date:"2026-07-29T10:00:00" },
+    { id:'as13', subject:"রসায়ন ২য় পত্র",              date:"2026-08-01T10:00:00" },
+    { id:'as14', subject:"জীববিজ্ঞান ১ম পত্র",        date:"2026-08-02T10:00:00" },
+    { id:'as15', subject:"জীববিজ্ঞান ২য় পত্র",        date:"2026-08-04T10:00:00" },
+    { id:'as16', subject:"উচ্চতর গণিত ১ম পত্র",       date:"2026-08-06T10:00:00" },
+    { id:'as17', subject:"উচ্চতর গণিত ২য় পত্র",       date:"2026-08-08T10:00:00" }
+].sort((a,b)=>new Date(a.date)-new Date(b.date));
+
+const buildAlimArts = opts => {
+    const base = [
+        { id:'aa1',  subject:"কুরআন মাজিদ",               date:"2026-07-02T10:00:00" },
+        { id:'aa2',  subject:"আরবি ১ম পত্র (সাধারণ)",    date:"2026-07-04T10:00:00" },
+        { id:'aa3',  subject:"বাংলা ১ম পত্র",              date:"2026-07-06T10:00:00" },
+        { id:'aa4',  subject:"বাংলা ২য় পত্র",              date:"2026-07-08T10:00:00" },
+        { id:'aa5',  subject:"ইংরেজি ১ম পত্র",             date:"2026-07-11T10:00:00" },
+        { id:'aa6',  subject:"ইংরেজি ২য় পত্র",             date:"2026-07-13T10:00:00" },
+        { id:'aa7',  subject:"আরবি ২য় পত্র",               date:"2026-07-15T10:00:00" },
+        { id:'aa8',  subject:"হাদিস ও উসুলুল হাদিস",      date:"2026-07-16T10:00:00" },
+        { id:'aa9',  subject:"আল ফিকহ ১ম পত্র",            date:"2026-07-18T10:00:00" },
+        { id:'aa10', subject:"আল ফিকহ ২য় পত্র",            date:"2026-07-19T10:00:00" },
+        { id:'aa11', subject:"তথ্য ও যোগাযোগ প্রযুক্তি",  date:"2026-07-22T10:00:00" },
+        { id:'aa12', subject:"বালাগাত ও মানতিক",           date:"2026-07-25T10:00:00" },
+        { id:'aa13', subject:"ইসলামের ইতিহাস",             date:"2026-07-27T10:00:00" }
+    ];
+    if (opts.includes('Civics')) {
+        base.push(
+            { id:'aa14c', subject:"পৌরনীতি ও সুশাসন ১ম পত্র", date:"2026-07-29T10:00:00" },
+            { id:'aa15c', subject:"পৌরনীতি ও সুশাসন ২য় পত্র", date:"2026-08-01T10:00:00" }
+        );
+    } 
+    if (opts.includes('Economics')) {
+        base.push(
+            { id:'aa14e', subject:"অর্থনীতি ১ম পত্র", date:"2026-07-29T10:00:00" },
+            { id:'aa15e', subject:"অর্থনীতি ২য় পত্র", date:"2026-08-01T10:00:00" }
+        );
+    }
+    return base.sort((a,b)=>new Date(a.date)-new Date(b.date));
+};
+
+const HSC_COMPULSORY = [
+    { id:'hc1', subject:"বাংলা ১ম পত্র",              date:"2026-07-02T10:00:00" },
+    { id:'hc2', subject:"বাংলা ২য় পত্র",              date:"2026-07-04T10:00:00" },
+    { id:'hc3', subject:"ইংরেজি ১ম পত্র",             date:"2026-07-06T10:00:00" },
+    { id:'hc4', subject:"ইংরেজি ২য় পত্র",             date:"2026-07-08T10:00:00" },
+    { id:'hc5', subject:"তথ্য ও যোগাযোগ প্রযুক্তি",  date:"2026-07-11T10:00:00" }
+];
+
+const buildHSCScience = opts => {
+    const base = [
+        ...HSC_COMPULSORY,
+        { id:'hs1', subject:"পদার্থবিজ্ঞান ১ম পত্র", date:"2026-07-13T10:00:00" },
+        { id:'hs2', subject:"পদার্থবিজ্ঞান ২য় পত্র", date:"2026-07-15T10:00:00" },
+        { id:'hs3', subject:"রসায়ন ১ম পত্র",           date:"2026-07-19T10:00:00" },
+        { id:'hs4', subject:"রসায়ন ২য় পত্র",           date:"2026-07-22T10:00:00" }
+    ];
+    if (opts.includes('Bio')) {
+        base.push(
+            { id:'hs_b1', subject:"জীববিজ্ঞান ১ম পত্র", date:"2026-07-27T10:00:00" },
+            { id:'hs_b2', subject:"জীববিজ্ঞান ২য় পত্র", date:"2026-07-29T10:00:00" }
+        );
+    } 
+    if (opts.includes('HighMath')) {
+        base.push(
+            { id:'hs_m1', subject:"উচ্চতর গণিত ১ম পত্র", date:"2026-08-02T10:00:00" },
+            { id:'hs_m2', subject:"উচ্চতর গণিত ২য় পত্র", date:"2026-08-04T10:00:00" }
+        );
+    } 
+    if (opts.includes('Statistics')) {
+        base.push(
+            { id:'hs_s1', subject:"পরিসংখ্যান ১ম পত্র", date:"2026-07-30T14:00:00" },
+            { id:'hs_s2', subject:"পরিসংখ্যান ২য় পত্র", date:"2026-08-01T14:00:00" }
+        );
+    }
+    return base.sort((a,b)=>new Date(a.date)-new Date(b.date));
+};
+
+const buildHSCArts = opts => {
+    const base = [
+        ...HSC_COMPULSORY,
+        { id:'ha1',  subject:"যুক্তিবিদ্যা ১ম পত্র",                       date:"2026-07-13T10:00:00" },
+        { id:'ha2',  subject:"যুক্তিবিদ্যা ২য় পত্র",                       date:"2026-07-15T10:00:00" },
+        { id:'ha3',  subject:"ভূগোল (তৃতীয়) ১ম পত্র",                     date:"2026-07-16T10:00:00" },
+        { id:'ha4',  subject:"ভূগোল (তৃতীয়) ২য় পত্র",                     date:"2026-07-18T10:00:00" },
+        { id:'ha5',  subject:"ইসলামের ইতিহাস ও সংস্কৃতি ১ম পত্র",         date:"2026-07-19T10:00:00" },
+        { id:'ha6',  subject:"ইসলামের ইতিহাস ও সংস্কৃতি ২য় পত্র",         date:"2026-07-22T10:00:00" },
+        { id:'ha7',  subject:"ইতিহাস ১ম পত্র",                             date:"2026-07-19T10:00:00" },
+        { id:'ha8',  subject:"ইতিহাস ২য় পত্র",                             date:"2026-07-22T10:00:00" },
+        { id:'ha9',  subject:"গৃহ ব্যবস্থাপনা ও পারিবারিক জীবন ১ম পত্র",  date:"2026-07-19T10:00:00" },
+        { id:'ha10', subject:"গৃহ ব্যবস্থাপনা ও পারিবারিক জীবন ২য় পত্র",  date:"2026-07-22T10:00:00" },
+        { id:'ha11', subject:"ইসলাম শিক্ষা ১ম পত্র",                       date:"2026-08-02T10:00:00" },
+        { id:'ha12', subject:"ইসলাম শিক্ষা ২য় পত্র",                       date:"2026-08-04T10:00:00" }
+    ];
+    if (opts.includes('Civics')) {
+        base.push(
+            { id:'ha_c1', subject:"পৌরনীতি ও সুশাসন ১ম পত্র", date:"2026-07-27T10:00:00" },
+            { id:'ha_c2', subject:"পৌরনীতি ও সুশাসন ২য় পত্র", date:"2026-07-29T10:00:00" }
+        );
+    } 
+    if (opts.includes('Economics')) {
+        base.push(
+            { id:'ha_e1', subject:"অর্থনীতি ১ম পত্র", date:"2026-07-23T10:00:00" },
+            { id:'ha_e2', subject:"অর্থনীতি ২য় পত্র", date:"2026-07-25T10:00:00" }
+        );
+    } 
+    if (opts.includes('Sociology')) {
+        base.push(
+            { id:'ha_s1', subject:"সমাজবিজ্ঞান ১ম পত্র", date:"2026-07-27T14:00:00" },
+            { id:'ha_s2', subject:"সমাজবিজ্ঞান ২য় পত্র", date:"2026-08-08T14:00:00" }
+        );
+    } 
+    if (opts.includes('SocialWork')) {
+        base.push(
+            { id:'ha_sw1', subject:"সমাজকর্ম ১ম পত্র", date:"2026-07-27T14:00:00" },
+            { id:'ha_sw2', subject:"সমাজকর্ম ২য় পত্র", date:"2026-08-08T14:00:00" }
+        );
+    }
+    return base.sort((a,b)=>new Date(a.date)-new Date(b.date));
+};
+
+const buildHSCCommerce = opts => {
+    const base = [
+        ...HSC_COMPULSORY,
+        { id:'hcom1', subject:"হিসাববিজ্ঞান ১ম পত্র",                  date:"2026-07-13T10:00:00" },
+        { id:'hcom2', subject:"হিসাববিজ্ঞান ২য় পত্র",                  date:"2026-07-15T10:00:00" },
+        { id:'hcom3', subject:"অর্থনীতি ১ম পত্র",                      date:"2026-07-23T10:00:00" },
+        { id:'hcom4', subject:"অর্থনীতি ২য় পত্র",                      date:"2026-07-25T10:00:00" },
+        { id:'hcom5', subject:"ব্যবসায় সংগঠন ও ব্যবস্থাপনা ১ম পত্র", date:"2026-07-27T10:00:00" },
+        { id:'hcom6', subject:"ব্যবসায় সংগঠন ও ব্যবস্থাপনা ২য় পত্র", date:"2026-07-29T10:00:00" },
+        { id:'hcom7', subject:"ফিন্যান্স, ব্যাংকিং ও বিমা ১ম পত্র",   date:"2026-08-06T10:00:00" },
+        { id:'hcom8', subject:"ফিন্যান্স, ব্যাংকিং ও বিমা ২য় পত্র",   date:"2026-08-08T10:00:00" }
+    ];
+    if (opts.includes('Production')) {
+        base.push(
+            { id:'hcom_p1', subject:"উৎপাদন ব্যবস্থাপনা ও বিপণন ১ম পত্র", date:"2026-07-19T10:00:00" },
+            { id:'hcom_p2', subject:"উৎপাদন ব্যবস্থাপনা ও বিপণন ২য় পত্র", date:"2026-07-22T10:00:00" }
+        );
+    } 
+    if (opts.includes('Engineering')) {
+        base.push(
+            { id:'hcom_e1', subject:"প্রকৌশল অঙ্কন ও ওয়ার্কশপ ১ম পত্র", date:"2026-07-23T10:00:00" },
+            { id:'hcom_e2', subject:"প্রকৌশল অঙ্কন ও ওয়ার্কশপ ২য় পত্র", date:"2026-07-25T10:00:00" }
+        );
+    } 
+    if (opts.includes('ChildDev')) {
+        base.push(
+            { id:'hcom_c1', subject:"শিশু বিকাশ ১ম পত্র", date:"2026-08-06T14:00:00" },
+            { id:'hcom_c2', subject:"শিশু বিকাশ ২য় পত্র", date:"2026-08-08T14:00:00" }
+        );
+    }
+    return base.sort((a,b)=>new Date(a.date)-new Date(b.date));
+};
+
+const OPTIONS_DICT = {
+    'Alim_Arts': [
+        {val: 'Civics', text: 'পৌরনীতি ও সুশাসন'},
+        {val: 'Economics', text: 'অর্থনীতি'}
+    ],
+    'HSC_Science': [
+        {val: 'Bio', text: 'জীববিজ্ঞান'},
+        {val: 'HighMath', text: 'উচ্চতর গণিত'},
+        {val: 'Statistics', text: 'পরিসংখ্যান'}
+    ],
+    'HSC_Arts': [
+        {val: 'Civics', text: 'পৌরনীতি ও সুশাসন'},
+        {val: 'Economics', text: 'অর্থনীতি'},
+        {val: 'Sociology', text: 'সমাজবিজ্ঞান'},
+        {val: 'SocialWork', text: 'সমাজকর্ম'}
+    ],
+    'HSC_Commerce': [
+        {val: 'Production', text: 'উৎপাদন ব্যবস্থাপনা'},
+        {val: 'Engineering', text: 'প্রকৌশল অঙ্কন'},
+        {val: 'ChildDev', text: 'শিশু বিকাশ'}
+    ]
+};
+
+const APP_VERSION = 'v5';
+if (localStorage.getItem('appVersion') !== APP_VERSION) {
+    localStorage.removeItem('exam');
+    localStorage.removeItem('group');
+    localStorage.removeItem('opt1');
+    localStorage.removeItem('opt2');
+    localStorage.removeItem('optional');
+    localStorage.setItem('appVersion', APP_VERSION);
+}
+
+let currentExam  = localStorage.getItem('exam')  || 'Alim';
+let currentGroup = localStorage.getItem('group') || 'Science';
+let currentOpt1  = localStorage.getItem('opt1');
+let currentOpt2  = localStorage.getItem('opt2');
+let currentRoutine  = [];
+
+const getStatus = (dateStr, now) => {
+    const d = new Date(dateStr), diff = d - now;
+    if (diff < 0) {
+        if (now > new Date(d.getTime() + 3*60*60*1000)) return { status:'completed' };
+        return { status:'ongoing' };
+    }
+    return {
+        status:'upcoming',
+        days:    Math.floor(diff/86400000),
+        hours:   Math.floor((diff%86400000)/3600000),
+        minutes: Math.floor((diff%3600000)/60000),
+        seconds: Math.floor((diff%60000)/1000),
+        diff
     };
+};
 
-    const scienceRoutine = [
-        { id:'s1', subject:"কুরআন মাজিদ", date:"2026-07-02T10:00:00" },
-        { id:'s2', subject:"আরবি সাহিত্য (বিজ্ঞান)", date:"2026-07-04T10:00:00" },
-        { id:'s3', subject:"বাংলা ১ম পত্র", date:"2026-07-06T10:00:00" },
-        { id:'s4', subject:"বাংলা ২য় পত্র", date:"2026-07-08T10:00:00" },
-        { id:'s5', subject:"ইংরেজি ১ম পত্র", date:"2026-07-11T10:00:00" },
-        { id:'s6', subject:"ইংরেজি ২য় পত্র", date:"2026-07-13T10:00:00" },
-        { id:'s7', subject:"হাদিস ও উসুলুল হাদিস", date:"2026-07-16T10:00:00" },
-        { id:'s8', subject:"ফিকহ", date:"2026-07-18T10:00:00" },
-        { id:'s9', subject:"তথ্য ও যোগাযোগ প্রযুক্তি", date:"2026-07-22T10:00:00" },
-        { id:'s10', subject:"পদার্থবিজ্ঞান ১ম পত্র", date:"2026-07-25T10:00:00" },
-        { id:'s11', subject:"পদার্থবিজ্ঞান ২য় পত্র", date:"2026-07-27T10:00:00" },
-        { id:'s12', subject:"রসায়ন ১ম পত্র", date:"2026-07-29T10:00:00" },
-        { id:'s13', subject:"রসায়ন ২য় পত্র", date:"2026-08-01T10:00:00" },
-        { id:'s14', subject:"জীববিজ্ঞান ১ম পত্র", date:"2026-08-02T10:00:00" },
-        { id:'s15', subject:"জীববিজ্ঞান ২য় পত্র", date:"2026-08-04T10:00:00" },
-        { id:'s16', subject:"উচ্চতর গণিত ১ম পত্র", date:"2026-08-06T10:00:00" },
-        { id:'s17', subject:"উচ্চতর গণিত ২য় পত্র", date:"2026-08-08T10:00:00" }
-    ].sort((a,b) => new Date(a.date)-new Date(b.date));
+const calcGap = (cur, prev) => {
+    const d1 = new Date(prev); d1.setHours(0,0,0,0);
+    const d2 = new Date(cur);  d2.setHours(0,0,0,0);
+    return Math.max(0, Math.floor((d2-d1)/86400000) - 1);
+};
 
-    const buildArts = opt => {
-        let base = [
-            { id:'a1', subject:"কুরআন মাজিদ", date:"2026-07-02T10:00:00" },
-            { id:'a2', subject:"আরবি ১ম পত্র (সাধারণ)", date:"2026-07-04T10:00:00" },
-            { id:'a3', subject:"বাংলা ১ম পত্র", date:"2026-07-06T10:00:00" },
-            { id:'a4', subject:"বাংলা ২য় পত্র", date:"2026-07-08T10:00:00" },
-            { id:'a5', subject:"ইংরেজি ১ম পত্র", date:"2026-07-11T10:00:00" },
-            { id:'a6', subject:"ইংরেজি ২য় পত্র", date:"2026-07-13T10:00:00" },
-            { id:'a7', subject:"আরবি ২য় পত্র", date:"2026-07-15T10:00:00" },
-            { id:'a8', subject:"হাদিস ও উসুলুল হাদিস", date:"2026-07-16T10:00:00" },
-            { id:'a9', subject:"আল ফিকহ ১ম পত্র", date:"2026-07-18T10:00:00" },
-            { id:'a10', subject:"আল ফিকহ ২য় পত্র", date:"2026-07-19T10:00:00" },
-            { id:'a11', subject:"তথ্য ও যোগাযোগ প্রযুক্তি", date:"2026-07-22T10:00:00" },
-            { id:'a12', subject:"বালাগাত ও মানতিক", date:"2026-07-25T10:00:00" },
-            { id:'a13', subject:"ইসলামের ইতিহাস", date:"2026-07-27T10:00:00" }
-        ];
-        if (opt === 'Civics') {
-            base.push(
-                { id:'a14c', subject:"পৌরনীতি ও সুশাসন ১ম পত্র", date:"2026-07-29T10:00:00" },
-                { id:'a15c', subject:"পৌরনীতি ও সুশাসন ২য় পত্র", date:"2026-08-01T10:00:00" }
-            );
-        } else {
-            base.push(
-                { id:'a14e', subject:"অর্থনীতি ১ম পত্র", date:"2026-07-29T10:00:00" },
-                { id:'a15e', subject:"অর্থনীতি ২য় পত্র", date:"2026-08-01T10:00:00" }
-            );
-        }
-        return base.sort((a,b) => new Date(a.date)-new Date(b.date));
-    };
+const isAfternoon = dateStr => new Date(dateStr).getHours() >= 12;
 
-    let currentGroup = 'Science';
-    let artsOptional = 'Civics';
-    let currentRoutine = scienceRoutine;
+function buildRoutine() {
+    const opts = currentGroup === 'Arts' ? [currentOpt1] : [currentOpt1, currentOpt2];
+    if (currentExam === 'Alim') {
+        return currentGroup === 'Science' ? ALIM_SCIENCE : buildAlimArts(opts);
+    }
+    if (currentGroup === 'Science')  return buildHSCScience(opts);
+    if (currentGroup === 'Arts')     return buildHSCArts(opts);
+    return buildHSCCommerce(opts);
+}
 
+function getOptionsListKey() {
+    if (currentExam === 'Alim' && currentGroup === 'Arts') return 'Alim_Arts';
+    if (currentExam === 'HSC') {
+        if (currentGroup === 'Science') return 'HSC_Science';
+        if (currentGroup === 'Arts') return 'HSC_Arts';
+        if (currentGroup === 'Commerce') return 'HSC_Commerce';
+    }
+    return null;
+}
 
-    const getStatus = (dateStr, now) => {
-        const d = new Date(dateStr);
-        const diff = d - now;
-        if (diff < 0) {
-            if (now > new Date(d.getTime() + 3*60*60*1000)) return { status: 'completed' };
-            return { status: 'ongoing' };
-        }
-        return {
-            status: 'upcoming',
-            days: Math.floor(diff/(86400000)),
-            hours: Math.floor((diff%86400000)/3600000),
-            minutes: Math.floor((diff%3600000)/60000),
-            seconds: Math.floor((diff%60000)/1000),
-            diff
-        };
-    };
+function setupUI() {
+    const g1 = document.getElementById('btnG1');
+    const g2 = document.getElementById('btnG2');
+    const g3 = document.getElementById('btnG3');
+    const wrap = document.getElementById('optionalWrapper');
+    const note = document.getElementById('commerceNote');
+    const isAlim = currentExam === 'Alim';
+    const activeClass = isAlim ? 'tab-btn active-green' : 'tab-btn active';
 
-    const calcGap = (cur, prev) => {
-        const d1 = new Date(prev); d1.setHours(0,0,0,0);
-        const d2 = new Date(cur); d2.setHours(0,0,0,0);
-        return Math.max(0, Math.floor((d2-d1)/86400000) - 1);
-    };
+    g1.textContent = 'বিজ্ঞান';
+    g2.textContent = isAlim ? 'সাধারণ' : 'মানবিক'; // আর্টস এর নাম সাধারণ/মানবিক
 
-    const btnScience = document.getElementById('btnScience');
-    const btnArts = document.getElementById('btnArts');
-    const artsOptions = document.getElementById('artsOptions');
-    const selectOptional = document.getElementById('selectOptional');
-    const nextExamContent = document.getElementById('nextExamContent');
-    const routineList = document.getElementById('routineList');
-    const routineTitle = document.getElementById('routineTitle');
-    const darkToggle = document.getElementById('darkToggle');
-    const html = document.documentElement;
-
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    html.setAttribute('data-theme', savedTheme);
-    document.getElementById('toggleLabel').textContent = savedTheme === 'dark' ? 'ডার্ক মোড' : 'লাইট মোড';
-
-    darkToggle.addEventListener('click', () => {
-        const isDark = html.getAttribute('data-theme') === 'dark';
-        const newTheme = isDark ? 'light' : 'dark';
-        html.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        document.getElementById('theme-meta').setAttribute('content', newTheme === 'dark' ? '#0f172a' : '#f0f4ff');
-        document.getElementById('toggleLabel').textContent = newTheme === 'dark' ? 'ডার্ক মোড' : 'লাইট মোড';
-    });
-
-    function setGroup(g) {
-        currentGroup = g;
-        if (g === 'Science') {
-            btnScience.className = 'tab-btn active';
-            btnArts.className = 'tab-btn inactive';
-            artsOptions.classList.remove('visible');
-            currentRoutine = scienceRoutine;
-        } else {
-            btnArts.className = 'tab-btn active';
-            btnScience.className = 'tab-btn inactive';
-            artsOptions.classList.add('visible');
-            currentRoutine = buildArts(artsOptional);
-        }
-        renderList();
-        updateTimer();
+    if (isAlim) {
+        g3.style.display = 'none';
+        g1.className = currentGroup === 'Science' ? activeClass : 'tab-btn inactive';
+        g2.className = currentGroup === 'Arts'    ? activeClass : 'tab-btn inactive';
+    } else {
+        g3.style.display = '';
+        g3.textContent = 'বাণিজ্য';
+        g1.className = currentGroup === 'Science'  ? activeClass : 'tab-btn inactive';
+        g2.className = currentGroup === 'Arts'     ? activeClass : 'tab-btn inactive';
+        g3.className = currentGroup === 'Commerce' ? activeClass : 'tab-btn inactive';
     }
 
-    // Android App Sync
-    function syncWithAndroid() {
-        if(window.AndroidApp) {
-            window.AndroidApp.savePreferences(currentGroup, artsOptional);
-        }
+    const listKey = getOptionsListKey();
+
+    if (!listKey) {
+        wrap.classList.remove('visible');
+        note.classList.remove('visible');
+        return;
     }
 
-    btnScience.addEventListener('click', () => { 
-        setGroup('Science'); 
-        localStorage.setItem('group', 'Science'); 
-        syncWithAndroid();
-    });
+    const options = OPTIONS_DICT[listKey];
+    let validVals = options.map(o => o.val);
     
-    btnArts.addEventListener('click', () => { 
-        setGroup('Arts'); 
-        localStorage.setItem('group', 'Arts'); 
-        syncWithAndroid();
-    });
+    // Validate currentOpt1
+    if (!validVals.includes(currentOpt1)) currentOpt1 = validVals[0];
+
+    const isArts = currentGroup === 'Arts';
     
-    selectOptional.addEventListener('change', e => {
-        artsOptional = e.target.value;
-        localStorage.setItem('optional', artsOptional);
-        currentRoutine = buildArts(artsOptional);
-        renderList();
-        updateTimer();
-        syncWithAndroid();
-    });
-
-    function renderList() {
-        const now = new Date();
-        const upcoming = currentRoutine.filter(e => getStatus(e.date, now).status === 'upcoming');
-        const next = upcoming[0] || null;
-
-        routineTitle.innerHTML = `${SVG.book} সম্পূর্ণ রুটিন (${toBnNum(currentRoutine.length)} বিষয়)`;
-
-        let html = '';
-        currentRoutine.forEach((exam, i) => {
-            const s = getStatus(exam.date, now);
-            const isNext = next && next.id === exam.id;
-            const gap = i > 0 ? calcGap(exam.date, currentRoutine[i-1].date) : 0;
-
-            let cardClass = 'exam-card';
-            let subjectClass = 'subject-name';
-            let badge = '';
-
-            if (s.status === 'completed') {
-                cardClass += ' card-completed';
-                subjectClass += ' completed';
-                badge = `<span class="badge badge-done">সম্পন্ন</span>`;
-            } else if (s.status === 'ongoing') {
-                cardClass += ' card-ongoing';
-                subjectClass += ' ongoing';
-                badge = `<span class="badge badge-ongoing">● চলছে</span>`;
-            } else if (isNext) {
-                cardClass += ' card-next';
-                subjectClass += ' next';
-                badge = `<span class="badge badge-next">পরবর্তী</span>`;
-            } else {
-                badge = `<span class="badge badge-days">${toBnNum(s.days)} দিন বাকি</span>`;
-            }
-
-            let gapBadge = '';
-            if (i > 0 && s.status !== 'completed') {
-                gapBadge = `<span class="gap-pill ${gap > 0 ? 'gap-positive' : 'gap-zero'}">${gap > 0 ? `${toBnNum(gap)} দিন গ্যাপ` : 'গ্যাপ নেই'}</span>`;
-            }
-
-            html += `
-            <div class="${cardClass}" style="animation-delay:${i*0.04}s">
-                <div class="card-top">
-                    <span class="${subjectClass}">${exam.subject}</span>
-                    ${badge}
-                </div>
-                <div class="card-bottom">
-                    <span class="date-pill">${SVG.cal} ${fmtDate(exam.date)} • ${fmtDay(exam.date)}</span>
-                    ${gapBadge}
-                </div>
-            </div>`;
+    if (isArts) {
+        // আর্টস এর জন্য শুধুমাত্র ১টি অপশন দেখাবে
+        document.getElementById('boxOpt2').style.display = 'none';
+        document.getElementById('lblOpt1').textContent = 'ঐচ্ছিক বিষয়';
+        document.getElementById('optionalWrapper').style.gridTemplateColumns = '1fr';
+        
+        let html1 = '';
+        options.forEach(o => {
+            html1 += `<option value="${o.val}" ${o.val === currentOpt1 ? 'selected' : ''}>${o.text}</option>`;
         });
-        routineList.innerHTML = html;
+        document.getElementById('selectOpt1').innerHTML = html1;
+        
+    } else {
+        // বিজ্ঞান ও কমার্সের জন্য ২টি অপশন দেখাবে
+        document.getElementById('boxOpt2').style.display = 'flex';
+        document.getElementById('lblOpt1').textContent = '৪র্থ বিষয় (আবশ্যিক)';
+        document.getElementById('optionalWrapper').style.gridTemplateColumns = '1fr 1fr';
+        
+        // Validate currentOpt2
+        if (!validVals.includes(currentOpt2) || currentOpt2 === currentOpt1) {
+            currentOpt2 = validVals.find(v => v !== currentOpt1) || validVals[0];
+        }
+        
+        let html1 = ''; let html2 = '';
+        options.forEach(o => {
+            html1 += `<option value="${o.val}" ${o.val === currentOpt1 ? 'selected' : ''}>${o.text}</option>`;
+            html2 += `<option value="${o.val}" ${o.val === currentOpt2 ? 'selected' : ''}>${o.text}</option>`;
+        });
+        
+        document.getElementById('selectOpt1').innerHTML = html1;
+        document.getElementById('selectOpt2').innerHTML = html2;
     }
+    
+    wrap.classList.add('visible');
+    
+    // Commerce Note
+    let showNote = !isAlim && currentGroup === 'Commerce' && (currentOpt1 === 'Engineering' || (!isArts && currentOpt2 === 'Engineering'));
+    note.classList.toggle('visible', showNote);
+}
 
-    function updateTimer() {
-        const now = new Date();
-        const upcoming = currentRoutine.filter(e => getStatus(e.date, now).status === 'upcoming');
-        const next = upcoming[0] || null;
+function handleOptionChange(isOpt1, newValue) {
+    if (isOpt1) {
+        if (currentGroup !== 'Arts' && newValue === currentOpt2) currentOpt2 = currentOpt1; // Swap
+        currentOpt1 = newValue;
+    } else {
+        if (newValue === currentOpt1) currentOpt1 = currentOpt2; // Swap
+        currentOpt2 = newValue;
+    }
+    refresh();
+}
 
-        // এই এইচটিএমএল টি শুধু ওয়েবসাইট ভিজিটরদের দেখাবে, অ্যাপের ভেতর হাইড থাকবে
-        const installBtnHTML = window.AndroidApp ? '' : `
-            <a href="https://github.com/Rahat0764/AlimRoutine/releases/download/v1.0/AlimRoutine_V1.apk" class="install-btn" target="_blank" rel="noopener noreferrer">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Install App
-            </a>
-        `;
+document.getElementById('selectOpt1').addEventListener('change', e => handleOptionChange(true, e.target.value));
+document.getElementById('selectOpt2').addEventListener('change', e => handleOptionChange(false, e.target.value));
 
-        if (!next) {
-            nextExamContent.innerHTML = `
-            <div style="position: absolute; right: 16px; top: 16px; z-index: 10;">${installBtnHTML}</div>
-            <div class="finished-state">
-                <div class="finished-icon">🎉</div>
-                <div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:4px">সব পরীক্ষা শেষ!</div>
-                <div style="font-size:12px;color:#93c5fd">আলহামদুলিল্লাহ, পরীক্ষা সম্পন্ন হয়েছে।</div>
-            </div>`;
-            return;
+function renderList() {
+    const now = new Date();
+    const upcoming = currentRoutine.filter(e => getStatus(e.date, now).status === 'upcoming');
+    const next = upcoming[0] || null;
+    document.getElementById('routineTitle').innerHTML = `${SVG.book} সম্পূর্ণ রুটিন (${toBnNum(currentRoutine.length)} বিষয়)`;
+    let html = '';
+    currentRoutine.forEach((exam, i) => {
+        const s = getStatus(exam.date, now);
+        const isNext = next && next.id === exam.id;
+        const gap = i > 0 ? calcGap(exam.date, currentRoutine[i-1].date) : 0;
+        const pm = isAfternoon(exam.date);
+        let cardClass = 'exam-card', subjectClass = 'subject-name', badge = '';
+        if (s.status === 'completed') {
+            cardClass += ' card-completed'; subjectClass += ' completed';
+            badge = `<span class="badge badge-done">সম্পন্ন</span>`;
+        } else if (s.status === 'ongoing') {
+            cardClass += ' card-ongoing'; subjectClass += ' ongoing';
+            badge = `<span class="badge badge-ongoing">● চলছে</span>`;
+        } else if (isNext) {
+            cardClass += ' card-next'; subjectClass += ' next';
+            badge = `<span class="badge badge-next">পরবর্তী</span>`;
+        } else {
+            badge = `<span class="badge badge-days">${toBnNum(s.days)} দিন বাকি</span>`;
         }
-
-        const s = getStatus(next.date, now);
-        const vals = [s.days, s.hours, s.minutes, s.seconds];
-        const labels = ['দিন','ঘণ্টা','মিনিট','সেকেন্ড'];
-
-        const existingTitle = nextExamContent.querySelector('.exam-title');
-        const existingGrid = nextExamContent.querySelector('.countdown-grid');
-        if (existingGrid && existingTitle && existingTitle.textContent === next.subject) {
-            const spans = nextExamContent.querySelectorAll('.countdown-value');
-            vals.forEach((v, i) => {
-                const txt = toBnNum(String(v).padStart(2,'0'));
-                if (spans[i] && spans[i].textContent !== txt) spans[i].textContent = txt;
-            });
-            return;
+        let gapBadge = '';
+        if (i > 0 && s.status !== 'completed') {
+            gapBadge = `<span class="gap-pill ${gap > 0 ? 'gap-positive' : 'gap-zero'}">${gap > 0 ? `${toBnNum(gap)} দিন গ্যাপ` : 'গ্যাপ নেই'}</span>`;
         }
-
-        const boxes = vals.map((v, i) => `
-            <div class="countdown-box">
-                <span class="countdown-value">${toBnNum(String(v).padStart(2,'0'))}</span>
-                <span class="countdown-label">${labels[i]}</span>
+        const timeTag = pm
+            ? `<span class="time-tag time-afternoon">দুপুর ২টা</span>`
+            : `<span class="time-tag time-morning">সকাল ১০টা</span>`;
+        html += `
+        <div class="${cardClass}" style="animation-delay:${i*0.04}s">
+            <div class="card-top"><span class="${subjectClass}">${exam.subject}</span>${badge}</div>
+            <div class="card-bottom">
+                <span class="date-pill">${SVG.cal} ${fmtDate(exam.date)} • ${fmtDay(exam.date)} ${timeTag}</span>
+                ${gapBadge}
             </div>
-        `).join('');
+        </div>`;
+    });
+    document.getElementById('routineList').innerHTML = html;
+}
 
-        nextExamContent.innerHTML = `
-        <div class="next-exam-label"><div class="pulse-dot"></div> পরবর্তী পরীক্ষা</div>
-        <div style="display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 2; animation: slideUp 0.5s ease both; margin-bottom: 4px;">
-            <div class="exam-title" style="animation: none; margin-bottom: 0;">${next.subject}</div>
-            ${installBtnHTML}
-        </div>
-        <div class="exam-date-line">${SVG.cal14} ${fmtDate(next.date)} • ${fmtDay(next.date)} (সকাল ১০:০০)</div>
-        <div class="countdown-grid">${boxes}</div>`;
+function updateTimer() {
+    const now = new Date();
+    const upcoming = currentRoutine.filter(e => getStatus(e.date, now).status === 'upcoming');
+    const next = upcoming[0] || null;
+    const nec = document.getElementById('nextExamContent');
+    const isAlim = currentExam === 'Alim';
+    
+    // Install Button Color logic
+    const installBtnCls = isAlim ? 'install-btn alim' : 'install-btn hsc';
+    
+    const installBtnHTML = window.AndroidApp ? '' : `
+        <a href="https://github.com/Rahat0764/AlimRoutine/releases/download/v1.0/AlimRoutine_V1.apk" class="${installBtnCls}" target="_blank" rel="noopener noreferrer">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Install App
+        </a>`;
+        
+    if (!next) {
+        nec.innerHTML = `
+        <div style="position:absolute;right:16px;top:16px;z-index:10;">${installBtnHTML}</div>
+        <div class="finished-state">
+            <div class="finished-icon">🎉</div>
+            <div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:4px">সব পরীক্ষা শেষ!</div>
+            <div style="font-size:12px;color:#93c5fd">আলহামদুলিল্লাহ, পরীক্ষা সম্পন্ন হয়েছে।</div>
+        </div>`;
+        return;
+    }
+    const s = getStatus(next.date, now);
+    const vals = [s.days, s.hours, s.minutes, s.seconds];
+    const labels = ['দিন','ঘণ্টা','মিনিট','সেকেন্ড'];
+    const existingTitle = nec.querySelector('.exam-title');
+    const existingGrid  = nec.querySelector('.countdown-grid');
+    if (existingGrid && existingTitle && existingTitle.textContent === next.subject) {
+        const spans = nec.querySelectorAll('.countdown-value');
+        vals.forEach((v,i) => { const t = toBnNum(String(v).padStart(2,'0')); if (spans[i] && spans[i].textContent !== t) spans[i].textContent = t; });
+        return;
     }
 
-    const savedGroup = localStorage.getItem('group') || 'Science';
-    const savedOptional = localStorage.getItem('optional') || 'Civics';
-    artsOptional = savedOptional;
-    selectOptional.value = savedOptional;
-    setGroup(savedGroup);
-    setInterval(updateTimer, 1000);
+    const timeStr = isAfternoon(next.date) ? 'দুপুর ২:০০' : 'সকাল ১০:০০';
+    const dotCls   = isAlim ? 'pulse-dot green-dot' : 'pulse-dot';
+    const labelCls = isAlim ? 'next-exam-label green-label' : 'next-exam-label';
+    const boxes = vals.map((v,i) => `
+        <div class="countdown-box">
+            <span class="countdown-value">${toBnNum(String(v).padStart(2,'0'))}</span>
+            <span class="countdown-label">${labels[i]}</span>
+        </div>`).join('');
+    nec.innerHTML = `
+    <div class="${labelCls}"><div class="${dotCls}"></div> পরবর্তী পরীক্ষা</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2;animation:slideUp 0.4s ease both;margin-bottom:4px;">
+        <div class="exam-title" style="animation:none;margin-bottom:0;">${next.subject}</div>
+        ${installBtnHTML}
+    </div>
+    <div class="exam-date-line">${SVG.cal14} ${fmtDate(next.date)} • ${fmtDay(next.date)} (${timeStr})</div>
+    <div class="countdown-grid">${boxes}</div>`;
+}
+
+function saveState() {
+    localStorage.setItem('exam',     currentExam);
+    localStorage.setItem('group',    currentGroup);
+    if(currentOpt1) localStorage.setItem('opt1', currentOpt1);
+    if(currentOpt2) localStorage.setItem('opt2', currentOpt2);
+    if (window.AndroidApp) {
+        try { window.AndroidApp.savePreferences(currentExam, currentGroup, currentOpt1); } catch(e){}
+    }
+}
+
+function refresh() {
+    setupUI();
+    currentRoutine = buildRoutine();
+    renderList();
+    updateTimer();
+    saveState();
+}
+
+document.getElementById('btnG1').addEventListener('click', () => {
+    currentGroup = 'Science'; refresh();
+});
+document.getElementById('btnG2').addEventListener('click', () => {
+    currentGroup = 'Arts'; refresh();
+});
+document.getElementById('btnG3').addEventListener('click', () => {
+    currentGroup = 'Commerce'; refresh();
+});
+
+document.getElementById('btnAlim').addEventListener('click', () => {
+    currentExam = 'Alim';
+    document.getElementById('btnAlim').className = 'exam-switch-btn active-alim';
+    document.getElementById('btnHSC').className  = 'exam-switch-btn inactive-sw';
+    if (currentGroup === 'Commerce') { currentGroup = 'Science'; }
+    refresh();
+});
+document.getElementById('btnHSC').addEventListener('click', () => {
+    currentExam = 'HSC';
+    document.getElementById('btnHSC').className  = 'exam-switch-btn active-hsc';
+    document.getElementById('btnAlim').className = 'exam-switch-btn inactive-sw';
+    refresh();
+});
+
+const darkToggle = document.getElementById('darkToggle');
+const savedTheme = localStorage.getItem('theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+document.getElementById('toggleLabel').textContent = savedTheme === 'dark' ? 'ডার্ক মোড' : 'লাইট মোড';
+document.getElementById('theme-meta').setAttribute('content', savedTheme === 'dark' ? '#0f172a' : '#f0f4ff');
+darkToggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const t = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+    localStorage.setItem('theme', t);
+    document.getElementById('theme-meta').setAttribute('content', t === 'dark' ? '#0f172a' : '#f0f4ff');
+    document.getElementById('toggleLabel').textContent = t === 'dark' ? 'ডার্ক মোড' : 'লাইট মোড';
+});
+
+if (currentExam === 'Alim') {
+    document.getElementById('btnAlim').className = 'exam-switch-btn active-alim';
+    document.getElementById('btnHSC').className  = 'exam-switch-btn inactive-sw';
+} else {
+    document.getElementById('btnHSC').className  = 'exam-switch-btn active-hsc';
+    document.getElementById('btnAlim').className = 'exam-switch-btn inactive-sw';
+}
+
+refresh();
+setInterval(updateTimer, 1000);
 </script>
 </body>
 </html>
